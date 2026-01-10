@@ -28,3 +28,15 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/* 드롭다운 메뉴(ul) 안에 active 된 링크가 하나라도 있으면 부모(navbar__link)를 녹색으로 */
+.navbar__item.dropdown:has(.dropdown__link--active)>.navbar__link {
+  color: var(--ifm-color-primary) !important;
+  /* 도쿠사우루스 기본 녹색 */
+  font-weight: bold !important;
+}
+
+/* 활성화 상태일 때 옆의 삼각형 화살표도 녹색으로 */
+.navbar__item.dropdown:has(.dropdown__link--active)>.navbar__link::after {
+  border-top-color: var(--ifm-color-primary) !important;
+}

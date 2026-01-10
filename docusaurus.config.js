@@ -10,8 +10,8 @@ import {themes as prismThemes} from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
+  title: 'zenoDoc',
+  tagline: 'zeno',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -27,8 +27,8 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'zeno', // Usually your GitHub org/user name.
+  projectName: 'zenoDoc', // Usually your repo name.
 
   onBrokenLinks: 'throw',
 
@@ -36,8 +36,8 @@ const config = {
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+    defaultLocale: 'ko',
+    locales: ['ko','en', 'ja', 'es', 'fr' ,'zh-Hans'],
   },
 
   presets: [
@@ -49,23 +49,23 @@ const config = {
           sidebarPath: './sidebars.js',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          // editUrl:
+          //   'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
         blog: {
           showReadingTime: true,
+          postsPerPage: 10,            
+          blogSidebarTitle: '전체',
+          blogSidebarCount: 'ALL',      
+          blogDescription: 'ZENO의 기술 블로그',
           feedOptions: {
             type: ['rss', 'atom'],
             xslt: true,
           },
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          // editUrl:'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
           // Useful options to enforce blogging best practices
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -83,70 +83,97 @@ const config = {
         respectPrefersColorScheme: true,
       },
       navbar: {
-        title: 'My Site',
+        title: 'ZENO',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'ZENO Site Logo',
           src: 'img/logo.svg',
         },
         items: [
-          {
-            type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
-            position: 'left',
-            label: 'Tutorial',
+          {to: '/blog', label: 'Introduce', position: 'left'},
+          { label: 'Zeno-Css', position: 'right', href: 'https://github.com/zenoK80'},
+          { label: 'Zeno-Motion', position: 'right',href: 'https://github.com/zenoK80'},
+          { label: 'Zeno-Icon', position: 'right',href: 'https://github.com/zenoK80'},
+          // { label: 'test', type: 'docSidebar', sidebarId: 'tutorialSidebar',position: 'right'},
+
+          { label: '컴퓨터공학', position: 'left',activeBaseRegex: `/docs/computer-since`,
+            items: [
+              { label: '데이터베이스', type: 'docSidebar', sidebarId: 'dataBaseSidebar'},
+              { label: '소프트웨어공학' ,type: 'docSidebar', sidebarId: 'softwareEngineeringSidebar'},
+              { label: '자료구조',type: 'docSidebar', sidebarId: 'dataStructureSidebar' },
+              { label: '컴퓨터구조',type: 'docSidebar', sidebarId: 'comStructureSidebar' },
+              { label: 'C언어',type: 'docSidebar', sidebarId: 'cLanguageSidebar' },
+            ],
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
-          {
-            href: 'https://github.com/facebook/docusaurus',
-            label: 'GitHub',
-            position: 'right',
+          { label: '웹프론트', position: 'left',activeBaseRegex: `/docs/web-front`,
+            items: [
+              { label: 'React',type: 'docSidebar', sidebarId: 'reactSidebar' },
+              { label: 'Next.js',type: 'docSidebar', sidebarId: 'nextJsSidebar' },
+              { label: 'TailwindCss',type: 'docSidebar', sidebarId: 'tailwindCssSidebar' },
+              { label: 'Gsap',type: 'docSidebar', sidebarId: 'gsapSidebar' },
+              { label: 'Three.js',type: 'docSidebar', sidebarId: 'threeJsSidebar' },
+              { label: 'TypeScript',type: 'docSidebar', sidebarId: 'typeScriptSidebar' },
+
+            ],
           },
+          { label: '웹백엔드', position: 'left',activeBaseRegex: `/docs/web-back`,
+            items: [
+              { label: 'Laravel',type: 'docSidebar', sidebarId: 'laravelSidebar' },
+            ],
+          },
+          // { href: 'https://github.com/zenoK80', label: 'GitHub', position: 'right',},
         ],
+        
       },
       footer: {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'Portfolio',
             items: [
-              {
-                label: 'Tutorial',
-                to: '/docs/intro',
+               {
+                label: '포트폴리오',
+                href: 'https://github.com/zenoK80',
               },
             ],
           },
           {
-            title: 'Community',
+            title: 'Github',
             items: [
-              {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-              },
-              {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'X',
-                href: 'https://x.com/docusaurus',
+               {
+                label: '깃허브',
+                href: 'https://github.com/zenoK80',
               },
             ],
           },
           {
-            title: 'More',
+            title: 'Blog',
             items: [
               {
-                label: 'Blog',
-                to: '/blog',
-              },
-              {
-                label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                label: '블로그',
+                href: 'https://github.com/zenoK80',
               },
             ],
           },
+          {
+            title: 'Stock Contribute',
+            items: [
+               {
+                label: '미리캔버스',
+                href: 'https://www.miricanvas.com/v2/design?panel=ELEMENTS&q=@zenoK',
+              },
+              {
+                label: '네이버 OGQ',
+                href: 'https://ogqmarket.naver.com/creators/zeno',
+              },
+              {
+                label: '어도비스톡',
+                href: 'https://stock.adobe.com/kr/contributor/212833145/zeno?load_type=author&prev_url=detail',
+              },
+            ],
+          },
+
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} zenoDoc , Inc. Built with Docusaurus.`,
       },
       prism: {
         theme: prismThemes.github,
