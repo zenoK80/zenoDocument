@@ -11,8 +11,8 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'zenoDoc',
-  tagline: 'zeno',
-  favicon: 'img/favicon.ico',
+  tagline: '😍😍😍',
+  favicon: 'img/zenoLogo.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -86,32 +86,32 @@ const config = {
         title: 'ZENO',
         logo: {
           alt: 'ZENO Site Logo',
-          src: 'img/logo.svg',
+          src: 'img/zenoLogo.png',
         },
         items: [
           {to: '/blog', label: 'Introduce', position: 'left'},
-          { label: 'Zeno-Css', position: 'right', href: 'https://github.com/zenoK80'},
-          { label: 'Zeno-Motion', position: 'right',href: 'https://github.com/zenoK80'},
-          { label: 'Zeno-Icon', position: 'right',href: 'https://github.com/zenoK80'},
+          // { label: 'Zeno-Css', position: 'right', href: 'https://github.com/zenoK80'},
+          // { label: 'Zeno-Motion', position: 'right',href: 'https://github.com/zenoK80'},
+          // { label: 'Zeno-Icon', position: 'right',href: 'https://github.com/zenoK80'},
           // { label: 'test', type: 'docSidebar', sidebarId: 'tutorialSidebar',position: 'right'},
 
           { label: '컴퓨터공학', position: 'left',activeBaseRegex: `/docs/computer-since`,
             items: [
-              { label: '데이터베이스', type: 'docSidebar', sidebarId: 'dataBaseSidebar'},
-              { label: '소프트웨어공학' ,type: 'docSidebar', sidebarId: 'softwareEngineeringSidebar'},
+              // { label: '데이터베이스', type: 'docSidebar', sidebarId: 'dataBaseSidebar'},
+              // { label: '소프트웨어공학' ,type: 'docSidebar', sidebarId: 'softwareEngineeringSidebar'},
               { label: '자료구조',type: 'docSidebar', sidebarId: 'dataStructureSidebar' },
-              { label: '컴퓨터구조',type: 'docSidebar', sidebarId: 'comStructureSidebar' },
-              { label: 'C언어',type: 'docSidebar', sidebarId: 'cLanguageSidebar' },
+              // { label: '컴퓨터구조',type: 'docSidebar', sidebarId: 'comStructureSidebar' },
+              // { label: 'C언어',type: 'docSidebar', sidebarId: 'cLanguageSidebar' },
             ],
           },
           { label: '웹프론트', position: 'left',activeBaseRegex: `/docs/web-front`,
             items: [
               { label: 'React',type: 'docSidebar', sidebarId: 'reactSidebar' },
-              { label: 'Next.js',type: 'docSidebar', sidebarId: 'nextJsSidebar' },
-              { label: 'TailwindCss',type: 'docSidebar', sidebarId: 'tailwindCssSidebar' },
-              { label: 'Gsap',type: 'docSidebar', sidebarId: 'gsapSidebar' },
-              { label: 'Three.js',type: 'docSidebar', sidebarId: 'threeJsSidebar' },
-              { label: 'TypeScript',type: 'docSidebar', sidebarId: 'typeScriptSidebar' },
+              // { label: 'Next.js',type: 'docSidebar', sidebarId: 'nextJsSidebar' },
+              // { label: 'TailwindCss',type: 'docSidebar', sidebarId: 'tailwindCssSidebar' },
+              // { label: 'Gsap',type: 'docSidebar', sidebarId: 'gsapSidebar' },
+              // { label: 'Three.js',type: 'docSidebar', sidebarId: 'threeJsSidebar' },
+              // { label: 'TypeScript',type: 'docSidebar', sidebarId: 'typeScriptSidebar' },
 
             ],
           },
@@ -127,15 +127,15 @@ const config = {
       footer: {
         style: 'dark',
         links: [
-          {
-            title: 'Portfolio',
-            items: [
-               {
-                label: '포트폴리오',
-                href: 'https://github.com/zenoK80',
-              },
-            ],
-          },
+          // {
+          //   title: 'Portfolio',
+          //   items: [
+          //      {
+          //       label: '포트폴리오',
+          //       href: 'https://github.com/zenoK80',
+          //     },
+          //   ],
+          // },
           {
             title: 'Github',
             items: [
@@ -145,15 +145,15 @@ const config = {
               },
             ],
           },
-          {
-            title: 'Blog',
-            items: [
-              {
-                label: '블로그',
-                href: 'https://github.com/zenoK80',
-              },
-            ],
-          },
+          // {
+          //   title: 'Blog',
+          //   items: [
+          //     {
+          //       label: '블로그',
+          //       href: 'https://github.com/zenoK80',
+          //     },
+          //   ],
+          // },
           {
             title: 'Stock Contribute',
             items: [
@@ -173,7 +173,7 @@ const config = {
           },
 
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} zenoDoc , Inc. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} zenoDoc, Inc.`
       },
       prism: {
         theme: prismThemes.github,
