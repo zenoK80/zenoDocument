@@ -13,7 +13,13 @@ const config = {
   title: 'zenoDoc',
   tagline: '😍😍😍',
   favicon: 'img/zenoLogo.ico',
-
+  scripts: [
+    {
+      src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4766888021964901',
+      async: true,
+      crossorigin: 'anonymous',
+    },
+  ],
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
@@ -37,7 +43,8 @@ const config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'ko',
-    locales: ['ko','en', 'ja', 'es', 'fr' ,'zh-Hans'],
+    locales: ['ko'],
+    // locales: ['ko','en', 'ja', 'es', 'fr' ,'zh-Hans','zh-Hant'],
   },
 
   presets: [
@@ -112,7 +119,7 @@ const config = {
               // { label: 'Gsap',type: 'docSidebar', sidebarId: 'gsapSidebar' },
               // { label: 'Three.js',type: 'docSidebar', sidebarId: 'threeJsSidebar' },
               // { label: 'TypeScript',type: 'docSidebar', sidebarId: 'typeScriptSidebar' },
-
+              // { label: 'Chart.js',type: 'docSidebar', sidebarId: 'charJsSidebar' },
             ],
           },
           { label: '웹백엔드', position: 'left',activeBaseRegex: `/docs/web-back`,
@@ -120,6 +127,10 @@ const config = {
               { label: 'Laravel',type: 'docSidebar', sidebarId: 'laravelSidebar' },
             ],
           },
+          // {
+          //   type: 'localeDropdown',
+          //   position: 'right',
+          // },
           // { href: 'https://github.com/zenoK80', label: 'GitHub', position: 'right',},
         ],
         
