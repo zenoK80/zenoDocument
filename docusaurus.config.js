@@ -100,7 +100,7 @@ const config = {
               // { label: '데이터베이스', type: 'docSidebar', sidebarId: 'dataBaseSidebar'},
               // { label: '소프트웨어공학' ,type: 'docSidebar', sidebarId: 'softwareEngineeringSidebar'},
               { label: '자료구조',type: 'docSidebar', sidebarId: 'dataStructureSidebar' },
-              // { label: '컴퓨터구조',type: 'docSidebar', sidebarId: 'comStructureSidebar' },
+              { label: '컴퓨터구조',type: 'docSidebar', sidebarId: 'comStructureSidebar' },
               // { label: 'C언어',type: 'docSidebar', sidebarId: 'cLanguageSidebar' },
             ],
           },
