@@ -13,11 +13,23 @@ const config = {
   title: 'zenoDoc',
   tagline: '😍😍😍',
   favicon: 'img/zenoLogo.ico',
+  // 1. 핵심 광고 스크립트
   scripts: [
     {
       src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4766888021964901',
       async: true,
       crossorigin: 'anonymous',
+    },
+  ],
+
+  // 2. 소유권 확인 메타 태그
+  headTags: [
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'google-adsense-account',
+        content: 'ca-pub-4766888021964901',
+      },
     },
   ],
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
