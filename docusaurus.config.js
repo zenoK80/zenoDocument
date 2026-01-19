@@ -143,6 +143,7 @@ const config = {
             items: [
               { label: 'Laravel',type: 'docSidebar', sidebarId: 'laravelSidebar' },
               { label: 'CodeIgniter',type: 'docSidebar', sidebarId: 'codeIgniterSidebar' },
+              // { label: 'Node.js',type: 'docSidebar', sidebarId: 'nodeJsSidebar' },
             ],
           },
           { label: '독학사1', position: 'left',activeBaseRegex: `/docs/self-taught`,
