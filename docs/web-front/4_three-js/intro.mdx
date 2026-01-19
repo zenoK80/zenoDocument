@@ -1,0 +1,611 @@
+---
+title: "Three.js란 무엇인가"
+description: "웹 브라우저에서 3D 그래픽을 구현할 수 있는 JavaScript 라이브러리 Three.js에 대해 소개합니다."
+slug: "threejs-introduction"
+sidebar_position: 0
+---
+
+# Three.js – JavaScript 3D Library
+
+## Three.js란?
+
+Three.js는 웹 브라우저에서 3D 그래픽을 쉽게 만들 수 있도록 도와주는 JavaScript 라이브러리입니다. 웹사이트에서 게임처럼 입체적인 물체를 보여주거나, 제품을 360도로 돌려가며 볼 수 있게 하거나, 인터랙티브한 3D 경험을 만들고 싶을 때 사용합니다.
+
+### WebGL이란?
+
+WebGL(Web Graphics Library)은 브라우저에서 3D 그래픽을 그릴 수 있게 해주는 기본 기술입니다. 컴퓨터의 그래픽 카드(GPU)를 직접 사용해서 빠르게 3D를 렌더링할 수 있습니다. 하지만 WebGL은 매우 '로우 레벨(low-level)'입니다. 쉽게 말해, 간단한 3D 상자 하나를 화면에 그리려고 해도 수백 줄의 복잡한 코드를 작성해야 합니다.
+
+### Three.js의 역할
+
+Three.js는 이런 복잡한 WebGL 코드를 숨기고, 훨씬 이해하기 쉽고 간단한 방법으로 3D를 만들 수 있게 해줍니다. 마치 포토샵이 복잡한 이미지 처리 알고리즘을 숨기고 간단한 도구로 그림을 그릴 수 있게 하는 것처럼, Three.js는 WebGL의 복잡함을 감추고 개발자 친화적인 인터페이스를 제공합니다.
+
+## 왜 Three.js를 사용하나요?
+
+### 생산성 향상
+
+WebGL로 직접 코딩하면 간단한 큐브 하나를 그리는데도 100줄 이상의 코드가 필요합니다. Three.js를 사용하면 10줄 정도로 같은 결과를 만들 수 있습니다. 개발 시간을 크게 단축시킬 수 있습니다.
+
+### 풍부한 기능
+
+조명(빛), 재질(물체의 표면 특성), 카메라(보는 시점), 그림자, 애니메이션 등 3D 그래픽을 만드는데 필요한 거의 모든 기능이 이미 준비되어 있습니다. 직접 복잡한 수학 계산을 하지 않아도 됩니다.
+
+### 크로스 브라우저 지원
+
+Chrome, Firefox, Safari, Edge 등 주요 웹 브라우저에서 모두 동일하게 작동합니다. 브라우저별로 다른 코드를 작성할 필요가 없습니다.
+
+### 활발한 커뮤니티
+
+2010년부터 개발되어 온 성숙한 라이브러리로, 수많은 예제, 튜토리얼, 그리고 질문에 답변해줄 개발자 커뮤니티가 존재합니다. 막히는 부분이 있어도 쉽게 해결책을 찾을 수 있습니다.
+
+## 주요 구성 요소
+
+Three.js로 3D 장면을 만들기 위해서는 크게 **3가지 필수 요소**가 필요합니다: **장면(Scene)**, **카메라(Camera)**, **렌더러(Renderer)**. 이 3가지는 항상 함께 사용됩니다. 영화를 찍는다고 생각하면 이해하기 쉽습니다. 장면은 촬영 세트장, 카메라는 실제 카메라, 렌더러는 그 영상을 화면에 보여주는 모니터입니다.
+
+### Scene (장면)
+
+Scene은 모든 3D 요소들이 존재하는 **무대**입니다. 무대 위에 배우(3D 객체), 조명, 그리고 카메라를 배치합니다. Scene 없이는 아무것도 만들 수 없습니다.
+
+```javascript
+// 새로운 Scene 객체를 만듭니다
+// THREE는 Three.js 라이브러리를 의미합니다
+const scene = new THREE.Scene();
+```
+
+이 한 줄의 코드로 비어있는 3D 공간이 만들어집니다. 아직 아무것도 없는 텅 빈 무대입니다.
+
+### Camera (카메라)
+
+Camera는 Scene을 **어떤 각도와 위치에서 볼 것인지** 결정합니다. 같은 무대라도 카메라를 정면에 두느냐, 위에서 내려다보느냐에 따라 전혀 다른 장면이 보이겠죠?
+
+Three.js에는 여러 종류의 카메라가 있지만, 가장 자주 사용하는 것은 **PerspectiveCamera(원근 카메라)**입니다. 이 카메라는 우리 눈으로 세상을 보는 것처럼, 멀리 있는 물체는 작게, 가까이 있는 물체는 크게 보이게 합니다.
+
+```javascript
+// PerspectiveCamera를 생성합니다
+const camera = new THREE.PerspectiveCamera(
+  75,                                    // FOV (Field of View): 시야각
+  window.innerWidth / window.innerHeight, // Aspect Ratio: 화면 비율
+  0.1,                                   // Near: 가까운 절단면
+  1000                                   // Far: 먼 절단면
+);
+```
+
+각 파라미터를 자세히 살펴보겠습니다:
+
+**첫 번째 파라미터 - FOV (75도)**
+- FOV는 Field of View의 약자로, '시야각'을 의미합니다
+- 카메라가 얼마나 넓은 범위를 볼 수 있는지 결정합니다
+- 75도는 사람의 눈과 비슷한 자연스러운 시야각입니다
+- 숫자가 클수록 넓은 범위를 봅니다 (광각 렌즈 효과)
+- 숫자가 작을수록 좁은 범위를 봅니다 (망원 렌즈 효과)
+
+**두 번째 파라미터 - Aspect Ratio (화면 비율)**
+- 화면의 가로 길이를 세로 길이로 나눈 값입니다
+- `window.innerWidth / window.innerHeight`는 브라우저 창의 비율을 자동으로 계산합니다
+- 예: 1920x1080 화면이면 1920/1080 = 1.78 (16:9 비율)
+- 이 값이 잘못되면 3D 객체가 찌그러져 보입니다
+
+**세 번째 파라미터 - Near (0.1)**
+- 카메라에서 얼마나 가까운 거리부터 렌더링할지 결정합니다
+- 0.1보다 가까이 있는 물체는 화면에 보이지 않습니다
+- 너무 작은 값(예: 0.00001)을 사용하면 렌더링 문제가 생길 수 있습니다
+
+**네 번째 파라미터 - Far (1000)**
+- 카메라에서 얼마나 먼 거리까지 렌더링할지 결정합니다
+- 1000보다 멀리 있는 물체는 화면에 보이지 않습니다
+- 너무 큰 값을 사용하면 성능이 떨어질 수 있습니다
+
+:::tip Near와 Far의 역할
+Near와 Far는 렌더링 최적화를 위해 필요합니다. 예를 들어 방 안을 보여주는 3D 씬이라면 Near는 0.1, Far는 100 정도면 충분합니다. 우주 공간처럼 광활한 씬이라면 Far를 10000 이상으로 설정해야 할 수도 있습니다.
+:::
+
+### Renderer (렌더러)
+
+Renderer는 카메라가 본 Scene을 실제로 **화면에 그려주는** 역할을 합니다. Scene과 Camera가 준비되었어도, Renderer가 없으면 아무것도 보이지 않습니다.
+
+```javascript
+// WebGL 방식으로 렌더링할 렌더러를 생성합니다
+const renderer = new THREE.WebGLRenderer();
+
+// 렌더러의 크기를 브라우저 창 크기에 맞춥니다
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+// 렌더러가 그릴 캔버스(canvas) 요소를 HTML 문서에 추가합니다
+document.body.appendChild(renderer.domElement);
+```
+
+각 줄을 자세히 살펴보겠습니다:
+
+**첫 번째 줄** - `new THREE.WebGLRenderer()`
+- WebGL 기술을 사용해서 3D를 그릴 렌더러를 만듭니다
+- 내부적으로 HTML의 `<canvas>` 요소를 생성합니다
+- `<canvas>`는 그림을 그릴 수 있는 HTML 요소입니다
+
+**두 번째 줄** - `renderer.setSize(...)`
+- 렌더러가 그릴 영역의 크기를 설정합니다
+- `window.innerWidth`는 브라우저 창의 가로 길이(픽셀)
+- `window.innerHeight`는 브라우저 창의 세로 길이(픽셀)
+- 전체 화면에 3D를 그리고 싶을 때 이렇게 설정합니다
+
+**세 번째 줄** - `document.body.appendChild(...)`
+- `renderer.domElement`는 렌더러가 만든 `<canvas>` 요소입니다
+- `appendChild`는 이 캔버스를 HTML 문서의 body에 추가합니다
+- 이 작업을 해야 비로소 화면에 3D가 보입니다
+
+### Geometry (기하학 형태)
+
+Geometry는 3D 객체의 **형태(모양)**를 정의합니다. 쉽게 말해 물체의 '뼈대'입니다. 큐브(정육면체), 구(sphere), 원기둥(cylinder) 같은 기본 도형들이 미리 만들어져 있습니다.
+
+```javascript
+// 가로, 세로, 깊이가 각각 1인 정육면체 형태를 만듭니다
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+```
+
+- `BoxGeometry`는 상자(정육면체) 모양입니다
+- 괄호 안의 숫자는 (가로, 세로, 깊이) 크기입니다
+- `(1, 1, 1)`은 모든 변이 1인 정육면체를 의미합니다
+- `(2, 1, 0.5)`처럼 바꾸면 직육면체가 됩니다
+
+:::note Three.js의 단위
+Three.js에서 1은 특정 단위(cm, m 등)를 의미하지 않습니다. 여러분이 정하기 나름입니다. 1을 1미터로 생각할 수도 있고, 1센티미터로 생각할 수도 있습니다. 중요한 것은 프로젝트 전체에서 일관되게 사용하는 것입니다.
+:::
+
+다른 기하학 형태들:
+- `SphereGeometry`: 구
+- `CylinderGeometry`: 원기둥
+- `PlaneGeometry`: 평면
+- `TorusGeometry`: 도넛 모양
+
+### Material (재질)
+
+Material은 물체의 **표면 특성**을 정의합니다. 같은 큐브 형태라도 Material에 따라 나무처럼 보일 수도, 금속처럼 보일 수도, 플라스틱처럼 보일 수도 있습니다. 색상, 반짝임, 투명도 등을 설정합니다.
+
+```javascript
+// 초록색 기본 재질을 만듭니다
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+```
+
+- `MeshBasicMaterial`은 가장 단순한 재질입니다
+- 조명의 영향을 받지 않고 항상 같은 색으로 보입니다
+- `{ color: 0x00ff00 }`에서 `0x00ff00`은 16진수 색상 코드입니다
+  - `0x`는 16진수를 의미합니다
+  - `00`은 빨강(Red) 값 (0 = 빨강 없음)
+  - `ff`는 초록(Green) 값 (255 = 최대)
+  - `00`은 파랑(Blue) 값 (0 = 파랑 없음)
+  - 즉, 순수한 초록색입니다
+
+다른 색상 예시:
+- `0xff0000`: 빨강
+- `0x0000ff`: 파랑
+- `0xffffff`: 흰색
+- `0x000000`: 검정
+- `0xffff00`: 노랑 (빨강 + 초록)
+
+다른 재질 종류들:
+- `MeshStandardMaterial`: 현실적인 재질 (조명 영향 받음)
+- `MeshPhongMaterial`: 반짝이는 재질
+- `MeshLambertMaterial`: 무광 재질
+- `MeshPhysicalMaterial`: 물리 기반 렌더링
+
+### Mesh (메시)
+
+Mesh는 Geometry(형태)와 Material(재질)을 **결합**해서 실제로 Scene에 배치할 수 있는 3D 객체를 만듭니다. 형태만 있고 재질이 없으면 보이지 않고, 재질만 있고 형태가 없어도 의미가 없습니다. 두 가지를 합쳐야 비로소 완성된 3D 물체가 됩니다.
+
+```javascript
+// Geometry와 Material을 결합해서 Mesh를 만듭니다
+const cube = new THREE.Mesh(geometry, material);
+
+// 만든 Mesh를 Scene에 추가합니다
+scene.add(cube);
+```
+
+- `new THREE.Mesh(geometry, material)`: 형태와 재질을 조합합니다
+- `scene.add(cube)`: 이 물체를 Scene에 배치합니다
+- `scene.add()`를 하지 않으면 Mesh를 만들어도 화면에 보이지 않습니다
+
+:::tip Geometry + Material = Mesh
+빵을 만드는 것과 비슷합니다. Geometry는 빵의 모양(동그란 빵, 바게트 등), Material은 빵의 재료와 색(밀가루 빵, 호밀 빵 등), Mesh는 완성된 빵입니다. 같은 모양에 다른 재료를 쓰면 다른 빵이 되죠!
+:::
+
+## 기본 예제 - 회전하는 큐브 만들기
+
+이제 지금까지 배운 개념들을 모두 사용해서 회전하는 초록색 큐브를 만들어보겠습니다. 코드 한 줄 한 줄 자세히 설명하겠습니다.
+
+### 1단계: Scene, Camera, Renderer 설정
+
+```javascript
+// 1. 새로운 Scene(무대)을 만듭니다
+const scene = new THREE.Scene();
+
+// 2. Camera를 만듭니다
+const camera = new THREE.PerspectiveCamera(
+  75,                                    // 시야각 75도
+  window.innerWidth / window.innerHeight, // 브라우저 창 비율에 맞춤
+  0.1,                                   // 0.1 거리부터 보임
+  1000                                   // 1000 거리까지 보임
+);
+
+// 3. WebGL 렌더러를 만듭니다
+const renderer = new THREE.WebGLRenderer();
+
+// 4. 렌더러 크기를 전체 화면 크기로 설정합니다
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+// 5. 렌더러가 만든 캔버스를 HTML 페이지에 추가합니다
+// 이제 화면에 3D를 그릴 준비가 완료되었습니다
+document.body.appendChild(renderer.domElement);
+```
+
+이 시점에서는 아직 화면에 아무것도 보이지 않습니다. 무대와 카메라와 스크린은 준비되었지만, 무대 위에 아무것도 없기 때문입니다.
+
+### 2단계: 3D 큐브 생성
+
+```javascript
+// 6. 정육면체 형태를 만듭니다 (가로, 세로, 깊이 모두 1)
+const geometry = new THREE.BoxGeometry();
+// BoxGeometry()에 아무것도 안 쓰면 기본값 (1, 1, 1)이 적용됩니다
+
+// 7. 초록색 기본 재질을 만듭니다
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+// 0x00ff00 = 순수한 초록색
+
+// 8. 형태와 재질을 결합해서 큐브를 만듭니다
+const cube = new THREE.Mesh(geometry, material);
+
+// 9. 큐브를 Scene에 추가합니다
+// 이제 큐브가 무대 위에 배치되었습니다
+scene.add(cube);
+```
+
+### 3단계: 카메라 위치 조정
+
+```javascript
+// 10. 카메라를 Z축(앞뒤) 방향으로 5만큼 뒤로 이동시킵니다
+camera.position.z = 5;
+```
+
+Three.js의 기본 좌표계:
+- **X축**: 좌우 (오른쪽이 +, 왼쪽이 -)
+- **Y축**: 상하 (위쪽이 +, 아래쪽이 -)
+- **Z축**: 앞뒤 (화면 밖으로 나오는 방향이 +, 화면 안쪽이 -)
+
+카메라와 큐브는 모두 처음에 (0, 0, 0) 위치에 생성됩니다. 그러면 카메라가 큐브 안에 있게 되어 아무것도 안 보입니다. 그래서 카메라를 Z축으로 5만큼 뒤로 빼서, 큐브를 정면에서 볼 수 있게 합니다.
+
+:::note 왜 5인가요?
+큐브의 크기가 1이고, 카메라의 Near 값이 0.1이므로, 최소 0.1보다는 멀리 떨어져야 합니다. 5는 큐브 전체를 편안하게 볼 수 있는 적당한 거리입니다. 2나 3으로 바꾸면 큐브가 더 크게 보이고, 10으로 바꾸면 작게 보입니다.
+:::
+
+### 4단계: 애니메이션 루프 만들기
+
+```javascript
+// 11. 애니메이션 함수를 정의합니다
+function animate() {
+  // 12. 브라우저에게 다음 프레임에 이 함수를 다시 실행해달라고 요청합니다
+  // 이렇게 하면 animate 함수가 계속 반복 실행됩니다 (초당 약 60회)
+  requestAnimationFrame(animate);
+  
+  // 13. 큐브를 X축(좌우)으로 조금 회전시킵니다
+  cube.rotation.x += 0.01;
+  // rotation.x는 X축을 기준으로 회전 (위아래로 구르는 회전)
+  // 0.01은 회전 각도 (라디안 단위)
+  
+  // 14. 큐브를 Y축(상하)으로도 조금 회전시킵니다
+  cube.rotation.y += 0.01;
+  // rotation.y는 Y축을 기준으로 회전 (좌우로 도는 회전)
+  
+  // 15. 카메라 시점에서 본 Scene을 렌더링해서 화면에 그립니다
+  renderer.render(scene, camera);
+  // 이 순간 화면이 업데이트됩니다
+}
+
+// 16. 애니메이션을 시작합니다
+animate();
+// 이 함수를 한 번 호출하면, requestAnimationFrame 때문에 계속 반복됩니다
+```
+
+### 애니메이션 원리 이해하기
+
+애니메이션은 여러 장의 그림을 빠르게 보여주는 것입니다. 영화나 만화책의 원리와 같습니다.
+
+1. `animate()` 함수가 실행됩니다
+2. 큐브를 조금 회전시킵니다 (rotation.x와 rotation.y를 0.01씩 증가)
+3. 현재 상태를 화면에 그립니다 (renderer.render)
+4. `requestAnimationFrame`이 브라우저에게 다음 프레임에 `animate()`를 다시 실행해달라고 요청합니다
+5. 1~4 과정이 초당 약 60번 반복됩니다
+
+이렇게 하면 큐브가 매 프레임마다 0.01 라디안씩 회전하므로, 부드럽게 돌아가는 것처럼 보입니다.
+
+:::tip requestAnimationFrame이란?
+`requestAnimationFrame`은 브라우저가 화면을 다시 그릴 준비가 되었을 때 함수를 실행해줍니다. 보통 초당 60번 실행되어 60fps(frames per second)의 부드러운 애니메이션을 만들 수 있습니다. `setInterval`이나 `setTimeout` 대신 이것을 사용하는 이유는:
+- 브라우저의 리프레시 주기와 동기화되어 더 부드럽습니다
+- 탭이 비활성화되면 자동으로 멈춰서 성능을 절약합니다
+- 배터리 소모를 줄입니다
+:::
+
+### 전체 코드
+
+위의 모든 단계를 합치면 다음과 같습니다:
+
+```javascript
+// Scene, Camera, Renderer 설정
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// 큐브 생성
+const geometry = new THREE.BoxGeometry();
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
+
+// 카메라 위치 설정
+camera.position.z = 5;
+
+// 애니메이션 루프
+function animate() {
+  requestAnimationFrame(animate);
+  
+  cube.rotation.x += 0.01;
+  cube.rotation.y += 0.01;
+  
+  renderer.render(scene, camera);
+}
+
+animate();
+```
+
+이 코드를 HTML 파일에서 실행하면 초록색 큐브가 화면 중앙에서 회전하는 것을 볼 수 있습니다!
+
+### 실험해보기
+
+코드를 이해했다면 다음을 시도해보세요:
+
+**색상 바꾸기**
+```javascript
+const material = new THREE.MeshBasicMaterial({ color: 0xff0000 }); // 빨강
+```
+
+**회전 속도 바꾸기**
+```javascript
+cube.rotation.x += 0.05; // 더 빠르게
+cube.rotation.y += 0.005; // 더 천천히
+```
+
+**큐브 크기 바꾸기**
+```javascript
+const geometry = new THREE.BoxGeometry(2, 2, 2); // 2배 크기
+```
+
+**카메라 거리 바꾸기**
+```javascript
+camera.position.z = 10; // 더 멀리서 보기
+```
+
+## Three.js로 무엇을 만들 수 있나요?
+
+Three.js는 다양한 분야에서 활용되고 있습니다. 실제 사용 사례를 살펴보겠습니다.
+
+### 웹 게임
+
+브라우저에서 실행되는 3D 게임을 만들 수 있습니다. 별도의 설치 없이 웹사이트에 접속하면 바로 게임을 즐길 수 있습니다. 간단한 퍼즐 게임부터 복잡한 RPG까지 제작 가능합니다.
+
+**예시**: 브라우저에서 플레이하는 레이싱 게임, 슈팅 게임, 플랫포머 게임
+
+### 제품 시각화
+
+온라인 쇼핑몰에서 제품을 360도로 돌려가며 볼 수 있게 해줍니다. 사용자가 마우스로 제품을 드래그하여 모든 각도에서 확인할 수 있어, 오프라인 매장에서 제품을 직접 보는 것과 비슷한 경험을 제공합니다.
+
+**예시**: 신발, 가구, 전자제품을 3D로 보여주는 전자상거래 사이트
+
+### 데이터 시각화
+
+복잡한 데이터를 3D 그래프나 차트로 표현합니다. 2D 그래프보다 더 많은 정보를 직관적으로 보여줄 수 있습니다. 특히 시간에 따른 데이터 변화, 다차원 데이터를 시각화할 때 유용합니다.
+
+**예시**: 지구본 위에 표시된 실시간 비행기 경로, 3D 막대 그래프, 주식 시장 데이터 시각화
+
+### 건축 및 인테리어
+
+건물이나 방을 3D로 미리 볼 수 있게 합니다. 건축 설계를 3D로 확인하거나, 가상으로 방을 꾸며볼 수 있습니다. 고객이 실제로 지어지기 전에 공간을 경험할 수 있게 해줍니다.
+
+**예시**: 가상 방 꾸미기 앱, 건축 설계 미리보기, 부동산 가상 투어
+
+### 교육 콘텐츠
+
+과학, 수학, 역사 등의 개념을 3D로 시각화하여 더 쉽게 이해할 수 있게 합니다. 평면 그림이나 텍스트로는 설명하기 어려운 복잡한 개념을 입체적으로 보여줄 수 있습니다.
+
+**예시**: 태양계 시뮬레이션, 인체 해부학 학습 앱, 분자 구조 모델, 역사적 건축물 재현
+
+### 예술 작품
+
+인터랙티브 웹 아트 프로젝트를 만듭니다. 관람자가 마우스나 키보드로 작품과 상호작용하며 새로운 경험을 할 수 있습니다. 디지털 아트 전시, 뮤직 비주얼라이저 등에 활용됩니다.
+
+**예시**: 음악에 반응하는 3D 비주얼, 인터랙티브 설치 미술, 생성적 아트(generative art)
+
+## Three.js 시작하기
+
+Three.js를 프로젝트에 포함시키는 방법은 여러 가지가 있습니다. 각각의 방법을 자세히 설명하겠습니다.
+
+### 방법 1: CDN 사용하기 (가장 간단함)
+
+CDN(Content Delivery Network)을 통해 Three.js를 바로 사용할 수 있습니다. 별도의 설치 없이 HTML 파일에 코드만 추가하면 됩니다. **처음 배우는 단계에서 가장 추천하는 방법**입니다.
+
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My First Three.js App</title>
+  <style>
+    /* 페이지 전체를 3D 씬으로 채웁니다 */
+    body { margin: 0; overflow: hidden; }
+  </style>
+</head>
+<body>
+  <!-- Import Map: 브라우저에게 'three'를 어디서 가져올지 알려줍니다 -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+      }
+    }
+  </script>
+  
+  <!-- Three.js 코드를 작성합니다 -->
+  <script type="module">
+    // Three.js 라이브러리를 가져옵니다
+    import * as THREE from 'three';
+    
+    // 여기에 Three.js 코드를 작성합니다
+    const scene = new THREE.Scene();
+    // ... 나머지 코드
+  </script>
+</body>
+</html>
+```
+
+**설명:**
+- `<script type="importmap">`: 브라우저에게 `'three'`라는 이름이 어느 URL을 가리키는지 알려줍니다
+- `<script type="module">`: ES6 모듈 방식으로 JavaScript를 사용하겠다는 의미입니다
+- `import * as THREE from 'three'`: Three.js의 모든 기능을 `THREE`라는 이름으로 가져옵니다
+
+### 방법 2: npm 사용하기 (프로젝트 개발용)
+
+npm(Node Package Manager)을 사용해서 Three.js를 설치하는 방법입니다. React, Vue, Next.js 같은 프레임워크와 함께 사용하거나, 더 큰 프로젝트를 만들 때 사용합니다.
+
+**1단계: Three.js 설치**
+```bash
+npm install three
+```
+
+이 명령어는 Three.js를 프로젝트에 설치합니다. `node_modules` 폴더에 Three.js 파일들이 다운로드됩니다.
+
+**2단계: 코드에서 사용**
+```javascript
+// Three.js를 가져옵니다
+import * as THREE from 'three';
+
+// Scene을 만듭니다
+const scene = new THREE.Scene();
+// ... 나머지 코드
+```
+
+**언제 npm을 사용하나요?**
+- 프로젝트가 커서 여러 파일로 나누어 관리해야 할 때
+- React, Vue 같은 프레임워크와 함께 사용할 때
+- 빌드 도구(Webpack, Vite 등)를 사용할 때
+- 팀 프로젝트에서 버전 관리가 중요할 때
+
+### 방법 3: 다운로드해서 사용하기
+
+Three.js 파일을 직접 다운로드해서 프로젝트 폴더에 넣는 방법입니다. 인터넷 연결 없이도 작동합니다.
+
+**1단계**: [threejs.org](https://threejs.org/)에서 Three.js를 다운로드합니다
+
+**2단계**: 압축을 풀고 `three.module.js` 파일을 프로젝트 폴더에 복사합니다
+
+**3단계**: HTML에서 상대 경로로 불러옵니다
+```html
+<script type="module">
+  import * as THREE from './three.module.js';
+  // ... Three.js 코드
+</script>
+```
+
+## 학습 리소스
+
+Three.js를 더 깊이 배우고 싶다면 다음 리소스들을 활용해보세요.
+
+### 공식 문서
+
+[threejs.org/docs](https://threejs.org/docs)는 Three.js의 공식 문서입니다.
+
+**특징:**
+- 모든 클래스와 메서드에 대한 상세한 설명
+- API 레퍼런스로 필요한 기능을 찾을 수 있습니다
+- 영어로 되어 있지만 구글 번역을 사용하면 이해하기 쉽습니다
+
+**활용 팁**: 어떤 기능을 사용하고 싶을 때 문서에서 검색해보세요. 예를 들어 "조명을 추가하고 싶다"면 "light"를 검색하면 여러 조명 종류와 사용법이 나옵니다.
+
+### 예제 모음
+
+[threejs.org/examples](https://threejs.org/examples)는 수백 개의 실제 동작하는 예제를 제공합니다.
+
+**예제 종류:**
+- 애니메이션
+- 카메라 조작
+- 조명 효과
+- 특수 재질
+- 물리 엔진
+- 파티클 효과
+- VR/AR
+
+**활용 팁**: 만들고 싶은 것과 비슷한 예제를 찾아서 코드를 분석해보세요. 각 예제의 소스 코드를 볼 수 있어서 어떻게 구현했는지 배울 수 있습니다.
+
+### 커뮤니티
+
+**Three.js Discourse (포럼)**
+- 주소: [discourse.threejs.org](https://discourse.threejs.org/)
+- 질문을 올리면 다른 개발자들이 답변해줍니다
+- 비슷한 문제를 겪은 사람들의 해결책을 찾을 수 있습니다
+
+**Three.js Discord**
+- 실시간 채팅으로 빠른 질문과 답변이 가능합니다
+- 다른 개발자들의 작업물을 볼 수 있습니다
+
+### 온라인 튜토리얼
+
+**YouTube**
+- "Three.js Tutorial"로 검색하면 많은 영상 강의가 있습니다
+- 한국어 강의도 점점 늘어나고 있습니다
+- 따라 만들기(hands-on) 방식으로 배우기 좋습니다
+
+**블로그 및 강의 사이트**
+- 구글에서 "Three.js 튜토리얼"로 검색하면 많은 자료가 나옵니다
+- Udemy, Coursera 같은 플랫폼에서 유료 강의도 있습니다
+
+### 추천 학습 순서
+
+처음 Three.js를 배울 때 다음 순서로 학습하는 것을 추천합니다:
+
+1. **기본 개념 이해하기** (1-2일)
+   - Scene, Camera, Renderer 이해하기
+   - 기본 도형(Geometry) 만들어보기
+   - Material과 색상 바꿔보기
+
+2. **조명 추가하기** (1-2일)
+   - 다양한 조명 종류 실험해보기
+   - 그림자 효과 만들어보기
+
+3. **카메라 조작하기** (1-2일)
+   - OrbitControls로 마우스로 시점 조작하기
+   - 카메라 애니메이션 만들기
+
+4. **3D 모델 불러오기** (2-3일)
+   - GLTFLoader로 외부 3D 모델 불러오기
+   - Blender 같은 3D 툴로 만든 모델 사용하기
+
+5. **프로젝트 만들기** (1주일+)
+   - 배운 것을 활용해서 자신만의 프로젝트 만들기
+   - 간단한 게임이나 시각화 프로젝트 시작하기
+
+## 마지막 조언
+
+Three.js는 처음에는 어렵게 느껴질 수 있습니다. 3D 그래픽스는 2D와는 다른 개념들(3차원 좌표, 카메라, 조명 등)이 필요하기 때문입니다. 하지만 걱정하지 마세요.
+
+**학습 팁:**
+- **작은 것부터 시작하세요**: 회전하는 큐브처럼 간단한 것부터 만들어보세요
+- **예제를 많이 보세요**: 다른 사람의 코드를 보고 따라 만들면서 배우세요
+- **실험을 두려워하지 마세요**: 코드를 바꿔보면서 어떻게 동작하는지 확인하세요
+- **문서를 자주 참고하세요**: 모든 것을 외울 필요는 없습니다. 필요할 때 찾아보면 됩니다
+- **커뮤니티를 활용하세요**: 막히는 부분이 있으면 질문하세요. 많은 사람들이 기꺼이 도와줄 것입니다
+
+Three.js를 배우면 웹에서 놀라운 3D 경험을 만들 수 있습니다. 단순한 웹페이지가 아니라 사용자가 직접 상호작용할 수 있는 입체적인 세계를 만들 수 있다는 것은 정말 멋진 일입니다.
+
+이제 여러분의 첫 Three.js 프로젝트를 시작해보세요. 간단한 회전하는 큐브부터 시작해서, 점점 더 복잡하고 재미있는 것들을 만들어나갈 수 있을 것입니다. 행운을 빕니다!

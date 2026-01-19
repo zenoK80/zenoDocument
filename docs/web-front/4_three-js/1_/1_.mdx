@@ -1,0 +1,595 @@
+---
+title: "Three.js 설치하기"
+description: "Three.js 프로젝트를 시작하기 위한 설치 및 환경 설정 방법을 단계별로 안내합니다."
+slug: "threejs-installation"
+sidebar_position: 2
+---
+
+# Three.js 설치하기
+
+Three.js 프로젝트를 시작하려면 먼저 개발 환경을 설정해야 합니다. 이 문서에서는 처음부터 끝까지 모든 과정을 자세히 설명합니다.
+
+## 프로젝트 구조 이해하기
+
+Three.js 프로젝트를 시작하기 전에, 어떤 파일들이 필요한지 알아봅시다. 최소한 **2개의 파일**이 필요합니다.
+
+### 필수 파일
+
+**1. index.html** - 웹페이지의 기본 구조를 정의하는 HTML 파일
+**2. main.js** - Three.js 코드를 작성할 JavaScript 파일
+
+이 파일 이름들은 꼭 이렇게 지어야 하는 것은 아니지만, 관례적으로 많이 사용되는 이름입니다. 이 가이드에서도 일관성을 위해 이 이름들을 사용하겠습니다.
+
+### 프로젝트 폴더 구조
+
+기본적인 Three.js 프로젝트의 폴더 구조는 다음과 같습니다:
+
+```
+my-threejs-project/
+├── index.html          (웹페이지 HTML 파일)
+├── main.js            (Three.js 코드를 작성할 파일)
+└── public/            (이미지, 3D 모델 등을 넣을 폴더)
+    ├── models/
+    ├── textures/
+    └── audio/
+```
+
+**각 요소 설명:**
+
+- **index.html**: 사용자가 웹사이트를 열었을 때 보게 되는 페이지입니다
+- **main.js**: 3D 장면을 만들고 애니메이션을 작성하는 JavaScript 코드가 들어갑니다
+- **public/ 폴더**: "정적(static)" 폴더라고도 하며, 변경 없이 그대로 웹사이트에 올라가는 파일들을 넣습니다
+  - 텍스처 이미지 (나무 질감, 돌 질감 등)
+  - 3D 모델 파일 (.glb, .gltf 등)
+  - 오디오 파일 (.mp3, .wav 등)
+
+:::tip public 폴더는 선택사항입니다
+처음 시작할 때는 public 폴더 없이 index.html과 main.js만으로도 충분합니다. 나중에 이미지나 3D 모델을 사용하게 되면 그때 만들어도 됩니다.
+:::
+
+## index.html 파일 만들기
+
+프로젝트 폴더에 `index.html` 파일을 만들고 다음 내용을 입력합니다:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>My first three.js app</title>
+    <style>
+      body { margin: 0; }
+    </style>
+  </head>
+  <body>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
+```
+
+### 코드 한 줄씩 이해하기
+
+```html
+<!DOCTYPE html>
+```
+- 이 문서가 HTML5 문서라고 브라우저에게 알려줍니다
+- 항상 HTML 문서의 맨 첫 줄에 위치합니다
+
+```html
+<html lang="en">
+```
+- HTML 문서의 시작을 표시합니다
+- `lang="en"`은 이 페이지가 영어로 작성되었다는 뜻입니다 (한국어는 "ko")
+
+```html
+<head>
+```
+- 페이지의 메타데이터(설명 정보)를 담는 부분입니다
+- 실제 화면에는 보이지 않지만 중요한 설정들이 들어갑니다
+
+```html
+<meta charset="utf-8">
+```
+- 문자 인코딩을 UTF-8로 설정합니다
+- 한글, 이모지 등 모든 문자를 올바르게 표시하기 위해 필요합니다
+
+```html
+<title>My first three.js app</title>
+```
+- 브라우저 탭에 표시될 제목입니다
+- 여러분의 프로젝트 이름으로 바꿔도 됩니다
+
+```html
+<style>
+  body { margin: 0; }
+</style>
+```
+- CSS 스타일을 정의합니다
+- `body { margin: 0; }`는 페이지의 여백을 없앱니다
+- 이렇게 하면 3D 씬이 화면 전체를 채울 수 있습니다
+- margin(여백)이 있으면 화면 가장자리에 빈 공간이 생깁니다
+
+```html
+<body>
+```
+- 실제로 화면에 보이는 내용이 들어가는 부분입니다
+- Three.js 캔버스가 여기에 추가됩니다
+
+```html
+<script type="module" src="/main.js"></script>
+```
+- JavaScript 파일을 불러옵니다
+- `type="module"`은 ES6 모듈 방식을 사용한다는 의미입니다
+  - 이 방식을 사용하면 `import`와 `export` 키워드를 쓸 수 있습니다
+- `src="/main.js"`는 main.js 파일을 불러온다는 뜻입니다
+
+## main.js 파일 만들기
+
+프로젝트 폴더에 `main.js` 파일을 만들고 일단 다음 한 줄만 입력합니다:
+
+```javascript
+import * as THREE from 'three';
+
+// 여기에 Three.js 코드를 작성합니다
+```
+
+**설명:**
+- `import * as THREE from 'three'`는 Three.js 라이브러리를 가져오는 코드입니다
+- `*`는 "모든 것"을 의미합니다
+- `as THREE`는 가져온 모든 것을 `THREE`라는 이름으로 사용하겠다는 뜻입니다
+- 이후 `THREE.Scene()`, `THREE.Camera()` 같은 방식으로 Three.js의 기능을 사용합니다
+
+## 개발 환경 설정하기 (2가지 방법)
+
+Three.js를 사용하는 방법은 크게 **2가지**가 있습니다. 각각 장단점이 있으니 자신에게 맞는 방법을 선택하세요.
+
+### 어떤 방법을 선택해야 할까요?
+
+**Option 1 (NPM 사용)**을 추천하는 경우:
+- 본격적으로 프로젝트를 개발하고 싶을 때
+- React, Vue 같은 프레임워크와 함께 사용할 때
+- 많은 외부 라이브러리를 사용할 예정일 때
+- 팀 프로젝트를 진행할 때
+
+**Option 2 (CDN 사용)**을 추천하는 경우:
+- Three.js를 처음 배우는 단계일 때
+- 간단한 프로토타입이나 실험을 하고 싶을 때
+- 복잡한 설정 없이 빠르게 시작하고 싶을 때
+- 한 개의 파일만으로 작업하고 싶을 때
+
+:::note 초보자는 Option 2를 먼저 시도해보세요
+처음 배우는 단계라면 Option 2 (CDN 사용)가 더 간단합니다. 나중에 프로젝트가 커지면 Option 1로 전환할 수 있습니다.
+:::
+
+## Option 1: NPM과 빌드 도구 사용하기
+
+이 방법은 **대부분의 전문 개발자들이 사용하는 표준 방식**입니다. 처음에는 설정이 복잡해 보일 수 있지만, 프로젝트가 커질수록 관리가 쉬워집니다.
+
+### NPM이란?
+
+NPM(Node Package Manager)은 JavaScript 패키지(라이브러리)를 관리하는 도구입니다. 앱스토어처럼 수많은 JavaScript 라이브러리를 검색하고 설치할 수 있습니다.
+
+### 빌드 도구란?
+
+빌드 도구(이 가이드에서는 Vite를 사용)는 개발을 편하게 해주는 프로그램입니다:
+- 파일을 저장하면 자동으로 브라우저를 새로고침합니다
+- 여러 파일을 하나로 합쳐줍니다
+- 코드를 최적화해서 로딩 속도를 빠르게 합니다
+
+### 1단계: Node.js 설치하기
+
+Node.js는 JavaScript를 브라우저 밖에서도 실행할 수 있게 해주는 프로그램입니다. NPM을 사용하려면 꼭 필요합니다.
+
+**설치 방법:**
+
+1. [nodejs.org](https://nodejs.org/)에 접속합니다
+2. "LTS" 버전(장기 지원 버전)을 다운로드합니다
+   - LTS는 안정적이고 오래 지원되는 버전입니다
+3. 다운로드한 파일을 실행하고 설치 마법사를 따라갑니다
+4. 모든 기본 설정을 그대로 사용하면 됩니다
+
+**설치 확인:**
+
+터미널(Windows: 명령 프롬프트 또는 PowerShell, Mac: 터미널)을 열고 다음 명령어를 입력합니다:
+
+```bash
+node --version
+```
+
+버전 번호(예: v18.17.0)가 나오면 성공적으로 설치된 것입니다.
+
+:::tip 터미널이란?
+터미널은 문자로 명령어를 입력해서 컴퓨터를 조작하는 프로그램입니다. Windows에서는 "cmd" 또는 "PowerShell", Mac에서는 "터미널"이라고 합니다. 처음에는 어렵게 느껴질 수 있지만, 개발할 때 매우 유용합니다.
+:::
+
+### 2단계: 프로젝트 폴더로 이동하기
+
+터미널에서 여러분의 프로젝트 폴더로 이동합니다.
+
+**Windows 예시:**
+```bash
+cd C:\Users\YourName\Documents\my-threejs-project
+```
+
+**Mac 예시:**
+```bash
+cd ~/Documents/my-threejs-project
+```
+
+**팁:** 폴더를 터미널 창에 드래그 앤 드롭하면 경로가 자동으로 입력됩니다.
+
+### 3단계: Three.js와 Vite 설치하기
+
+프로젝트 폴더에서 다음 명령어들을 **순서대로** 입력합니다:
+
+```bash
+npm install --save three
+```
+
+**이 명령어의 의미:**
+- `npm install`: npm을 사용해서 패키지를 설치합니다
+- `--save`: 이 패키지가 프로젝트에 필요하다고 기록합니다
+- `three`: Three.js 라이브러리의 npm 패키지 이름입니다
+
+설치가 완료되면 (1-2분 소요) 다음 명령어를 입력합니다:
+
+```bash
+npm install --save-dev vite
+```
+
+**이 명령어의 의미:**
+- `--save-dev`: 이 패키지는 개발할 때만 필요하다고 기록합니다
+- `vite`: Vite 빌드 도구를 설치합니다
+
+:::note 설치 후 생긴 것들
+설치가 완료되면 프로젝트 폴더에 새로운 파일과 폴더가 생깁니다:
+
+- **node_modules/ 폴더**: 설치된 모든 라이브러리가 들어있습니다 (매우 큽니다!)
+- **package.json 파일**: 프로젝트 정보와 필요한 라이브러리 목록이 기록되어 있습니다
+- **package-lock.json 파일**: 정확한 버전 정보가 기록되어 있습니다
+
+`node_modules` 폴더는 크기가 크지만 걱정하지 마세요. Git에 올릴 때는 제외하고, 나중에 `npm install` 명령어 하나로 다시 설치할 수 있습니다.
+:::
+
+### 4단계: 개발 서버 실행하기
+
+이제 개발 서버를 실행해봅시다. 터미널에 다음 명령어를 입력합니다:
+
+```bash
+npx vite
+```
+
+**npx란?**
+- `npx`는 npm 패키지를 임시로 실행하는 명령어입니다
+- 전역 설치 없이 바로 프로그램을 실행할 수 있습니다
+
+명령어를 실행하면 다음과 같은 메시지가 나타납니다:
+
+```
+VITE v5.0.0  ready in 500 ms
+
+➜  Local:   http://localhost:5173/
+➜  Network: use --host to expose
+➜  press h + enter to show help
+```
+
+**성공!** 이제 브라우저를 열고 `http://localhost:5173/` (또는 표시된 주소)로 접속하세요.
+
+**localhost란?**
+- "로컬호스트"는 여러분의 컴퓨터를 의미합니다
+- `:5173`은 포트 번호입니다 (프로그램들이 통신하는 문 번호라고 생각하세요)
+- 이 주소는 여러분의 컴퓨터에서만 접속 가능합니다
+
+화면이 비어있다면 정상입니다! 아직 3D 씬을 만들지 않았으니까요. 이제 `main.js`에 Three.js 코드를 작성하면 됩니다.
+
+**개발 모드의 장점:**
+- 파일을 수정하고 저장하면 브라우저가 자동으로 새로고침됩니다
+- 오류가 발생하면 화면에 친절하게 표시됩니다
+- 빠른 속도로 테스트할 수 있습니다
+
+**서버 종료하기:**
+터미널에서 `Ctrl + C`를 누르면 서버가 종료됩니다.
+
+### 5단계: 배포 준비하기 (나중에 필요할 때)
+
+프로젝트가 완성되어 웹에 배포하고 싶을 때는 다음 명령어를 실행합니다:
+
+```bash
+npx vite build
+```
+
+이 명령어는:
+- 코드를 최적화합니다 (압축하고 불필요한 부분 제거)
+- `dist/` 폴더에 배포용 파일들을 만듭니다
+- 이 폴더의 내용을 웹 호스팅 서비스에 업로드하면 됩니다
+
+## Option 2: CDN 사용하기
+
+이 방법은 **가장 간단한 방법**입니다. 아무것도 설치하지 않고 바로 시작할 수 있습니다. 처음 배울 때 추천합니다.
+
+### CDN이란?
+
+CDN(Content Delivery Network)은 인터넷에서 파일을 빠르게 제공하는 서비스입니다. Three.js 파일을 직접 다운로드하지 않고, 인터넷에 있는 Three.js를 사용합니다.
+
+**장점:**
+- 설치가 필요 없습니다
+- 설정이 간단합니다
+- 빠르게 시작할 수 있습니다
+
+**단점:**
+- 인터넷 연결이 필요합니다
+- 큰 프로젝트에서는 관리가 복잡해질 수 있습니다
+
+### 1단계: index.html 수정하기
+
+앞서 만든 `index.html` 파일을 열고, `<head>` 태그 안에 (스타일 코드 뒤에) 다음 코드를 추가합니다:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>My first three.js app</title>
+    <style>
+      body { margin: 0; }
+    </style>
+    
+    <!-- 여기에 추가합니다 -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+    
+  </head>
+  <body>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
+```
+
+### 코드 이해하기
+
+```html
+<script type="importmap">
+```
+- Import Map은 브라우저에게 "이 이름으로 import하면 저 URL에서 가져와라"고 알려주는 설정입니다
+- `type="importmap"`은 이 스크립트가 Import Map이라는 의미입니다
+
+```javascript
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+```
+
+**첫 번째 줄 설명:**
+- `"three": "https://..."`
+- 코드에서 `import ... from 'three'`라고 쓰면
+- 실제로는 이 URL에서 파일을 가져옵니다
+- `@0.160.0`은 Three.js의 버전입니다
+
+**두 번째 줄 설명:**
+- `"three/addons/": "https://..."`
+- Three.js의 추가 기능들(OrbitControls, GLTFLoader 등)을 가져올 때 사용합니다
+- 예: `import { OrbitControls } from 'three/addons/controls/OrbitControls.js'`
+
+:::warning 버전 번호를 업데이트하세요
+위 코드의 `0.160.0`은 예시입니다. 최신 버전을 사용하려면:
+1. [npm three.js 페이지](https://www.npmjs.com/package/three)를 방문합니다
+2. 현재 최신 버전 번호를 확인합니다
+3. 코드의 `0.160.0`을 최신 버전으로 바꿉니다
+4. 두 줄 모두 같은 버전을 사용해야 합니다!
+:::
+
+### 2단계: 로컬 서버 실행하기
+
+CDN을 사용하더라도 **로컬 서버는 필요합니다**. 보안상의 이유로 HTML 파일을 더블클릭해서 여는 방식으로는 일부 기능이 작동하지 않습니다.
+
+먼저 Node.js를 설치합니다 (Option 1의 1단계 참고).
+
+그 다음 터미널에서 프로젝트 폴더로 이동하고 다음 명령어를 실행합니다:
+
+```bash
+npx serve .
+```
+
+**명령어 설명:**
+- `npx serve`: serve라는 간단한 웹 서버를 실행합니다
+- `.`: 현재 폴더를 서버로 제공합니다
+
+서버가 시작되면 다음과 같은 메시지가 나타납니다:
+
+```
+   ┌─────────────────────────────────┐
+   │                                 │
+   │   Serving!                      │
+   │                                 │
+   │   Local:  http://localhost:3000 │
+   │                                 │
+   └─────────────────────────────────┘
+```
+
+브라우저에서 `http://localhost:3000`으로 접속하면 됩니다!
+
+:::tip 다른 로컬 서버 옵션들
+`serve` 외에도 여러 로컬 서버가 있습니다:
+
+**Python이 설치되어 있다면:**
+```bash
+# Python 3
+python -m http.server 8000
+
+# Python 2
+python -m SimpleHTTPServer 8000
+```
+
+**VS Code를 사용한다면:**
+- "Live Server" 확장 프로그램을 설치하세요
+- HTML 파일에서 우클릭 → "Open with Live Server"
+
+**Node.js http-server:**
+```bash
+npx http-server
+```
+
+모두 같은 기능을 합니다. 편한 것을 사용하세요!
+:::
+
+### 3단계: 배포하기 (나중에 필요할 때)
+
+CDN 방식으로 작업했다면 배포가 매우 간단합니다:
+1. 모든 소스 파일(index.html, main.js, public 폴더 등)을 웹 호스팅 서비스에 업로드합니다
+2. 끝입니다! 별도의 빌드 과정이 필요 없습니다
+
+**주의사항:**
+- Import Map의 버전을 항상 일치시켜야 합니다
+- CDN 서비스가 일시적으로 중단되면 여러분의 웹사이트도 작동하지 않을 수 있습니다
+
+## 추가 기능(Addons) 사용하기
+
+Three.js는 핵심 기능 외에도 많은 **추가 기능(Addons)**을 제공합니다. 이런 것들이 있습니다:
+
+- **Controls (컨트롤)**: 마우스로 카메라를 움직이는 기능
+  - OrbitControls: 마우스로 드래그해서 회전
+  - FlyControls: 날아다니는 듯한 조작
+  
+- **Loaders (로더)**: 외부 파일을 불러오는 기능
+  - GLTFLoader: 3D 모델 파일 불러오기
+  - TextureLoader: 이미지 불러오기
+  
+- **Post-processing (후처리 효과)**: 화면 효과 추가
+  - Bloom: 빛이 번지는 효과
+  - DepthOfField: 아웃포커스 효과
+
+### Addons 사용 방법
+
+Addons는 별도로 설치할 필요가 없지만, import는 따로 해야 합니다.
+
+**예제: OrbitControls와 GLTFLoader 사용하기**
+
+```javascript
+// Three.js 기본 라이브러리를 가져옵니다
+import * as THREE from 'three';
+
+// OrbitControls addon을 가져옵니다
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// GLTFLoader addon을 가져옵니다
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+// Scene, Camera, Renderer 설정
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// OrbitControls를 생성합니다
+// 이제 마우스로 드래그해서 카메라를 회전시킬 수 있습니다
+const controls = new OrbitControls(camera, renderer.domElement);
+
+// GLTFLoader를 생성합니다
+// 3D 모델 파일을 불러올 수 있습니다
+const loader = new GLTFLoader();
+```
+
+**코드 설명:**
+
+```javascript
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+```
+- `{ OrbitControls }`: 중괄호는 특정 클래스만 가져온다는 의미입니다
+- `three/addons/`: Three.js 추가 기능 경로입니다
+- `controls/OrbitControls.js`: OrbitControls가 있는 파일 위치입니다
+
+```javascript
+const controls = new OrbitControls(camera, renderer.domElement);
+```
+- 카메라와 렌더러의 캔버스를 OrbitControls에 연결합니다
+- 이제 사용자가 마우스로 씬을 조작할 수 있습니다
+
+:::tip Addons는 필요할 때 찾아서 사용하세요
+처음부터 모든 Addons를 외울 필요는 없습니다. 필요한 기능이 생기면 [Three.js 예제](https://threejs.org/examples/)를 참고해서 어떤 Addon을 사용하면 되는지 확인하세요.
+:::
+
+## 외부 라이브러리 사용하기
+
+Three.js 생태계에는 공식 라이브러리 외에도 많은 **써드파티(third-party) 라이브러리**가 있습니다. 예를 들어:
+
+- **Cannon.js / Ammo.js**: 물리 엔진 (중력, 충돌 등)
+- **Tween.js**: 부드러운 애니메이션
+- **Stats.js**: 성능 모니터링 (FPS 확인)
+
+이런 라이브러리들은 Three.js와 별도로 설치해야 합니다.
+
+**NPM 방식:**
+```bash
+npm install cannon-es
+```
+
+```javascript
+import * as CANNON from 'cannon-es';
+```
+
+**CDN 방식:**
+```html
+<script type="importmap">
+  {
+    "imports": {
+      "three": "...",
+      "cannon-es": "https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js"
+    }
+  }
+</script>
+```
+
+## 문제 해결 (Troubleshooting)
+
+### "Module not found" 오류
+
+**원인**: Import Map이 제대로 설정되지 않았거나, npm install을 하지 않았습니다.
+
+**해결:**
+- CDN 방식: Import Map이 `<head>` 태그 안에 있는지 확인
+- NPM 방식: `npm install three` 명령어를 실행했는지 확인
+
+### 화면이 하얗게만 나옵니다
+
+**원인**: JavaScript에서 오류가 발생했습니다.
+
+**해결:**
+1. 브라우저 개발자 도구를 엽니다 (F12 키)
+2. "Console" 탭에서 오류 메시지를 확인합니다
+3. 빨간색으로 표시된 오류를 읽고 해당 줄을 수정합니다
+
+### "Cross-Origin" 오류
+
+**원인**: 로컬 서버를 사용하지 않고 파일을 직접 열었습니다.
+
+**해결:** 로컬 서버를 실행하고 `http://localhost:...`로 접속하세요.
+
+### Vite가 실행되지 않습니다
+
+**원인**: Node.js가 설치되지 않았거나, 프로젝트 폴더가 아닌 곳에서 명령어를 실행했습니다.
+
+**해결:**
+1. `node --version`으로 Node.js 설치 확인
+2. `cd` 명령어로 프로젝트 폴더로 이동했는지 확인
+3. `npm install vite --save-dev` 다시 실행
+
+## 다음 단계
+
+환경 설정이 완료되었습니다! 이제 다음을 시도해보세요:
+
+1. **첫 번째 씬 만들기**: 회전하는 큐브를 만들어보세요
+2. **조명 추가하기**: 씬에 빛을 추가해보세요
+3. **카메라 조작하기**: OrbitControls로 마우스 조작을 구현해보세요
+4. **3D 모델 불러오기**: GLTFLoader로 외부 모델을 사용해보세요
+
+Three.js의 세계에 오신 것을 환영합니다! 🎉

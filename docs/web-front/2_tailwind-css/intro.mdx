@@ -1,0 +1,60 @@
+---
+title: Tailwind CSS 소개
+description: 유틸리티 우선 CSS 프레임워크인 Tailwind CSS에 대해 알아봅니다
+slug: /tailwind-css/intro
+sidebar_position: 0
+---
+
+# Tailwind CSS란?
+
+Tailwind CSS는 **유틸리티 우선(Utility-First)** CSS 프레임워크입니다. 
+기존의 Bootstrap이나 Material UI처럼 미리 만들어진 컴포넌트를 제공하는 대신, 작은 유틸리티 클래스들을 조합하여 원하는 디자인을 빠르게 구현할 수 있게 해줍니다.
+
+## 주요 특징
+
+### 1. 유틸리티 우선 접근 방식
+
+별도의 CSS 파일을 작성하지 않고도 HTML에서 직접 스타일링이 가능합니다.
+
+```html
+<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+  버튼
+</button>
+```
+
+### 2. 반응형 디자인
+
+모바일부터 데스크톱까지 다양한 화면 크기에 대응하는 반응형 디자인을 쉽게 구현할 수 있습니다.
+
+```html
+<div class="text-sm md:text-base lg:text-lg">
+  반응형 텍스트
+</div>
+```
+
+### 3. 커스터마이징
+
+`tailwind.config.js` 파일을 통해 색상, 간격, 폰트 등을 프로젝트에 맞게 커스터마이징할 수 있습니다.
+
+### 4. 최적화된 프로덕션 빌드
+
+사용하지 않는 CSS를 자동으로 제거하여 최소한의 파일 크기를 유지합니다.
+
+## 왜 Tailwind CSS를 사용할까요?
+
+- **빠른 개발 속도**: CSS 파일을 오가며 작업할 필요 없이 HTML에서 바로 스타일링
+- **일관된 디자인**: 미리 정의된 디자인 시스템으로 일관성 유지
+- **유지보수 용이**: 클래스 이름 고민 없이 직관적인 유틸리티 클래스 사용
+- **작은 번들 크기**: 실제 사용한 스타일만 포함되어 최종 CSS 파일이 작음
+
+## 시작하기
+
+Tailwind CSS를 다양한 환경에서 사용할 수 있습니다:
+
+- Vite
+- Next.js
+- Create React App
+- Vue CLI
+- 그 외 다양한 빌드 도구
+
+다음 섹션에서는 Vite와 함께 Tailwind CSS를 설치하고 설정하는 방법을 알아보겠습니다.

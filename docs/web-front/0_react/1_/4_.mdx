@@ -1,0 +1,1740 @@
+---
+title: 기존 프로젝트에 React 추가하기
+description: 이미 있는 웹사이트에 React를 점진적으로 추가하는 방법
+slug: /add-react-to-existing-project
+sidebar_position: 4
+---
+
+# 기존 프로젝트에 React 추가하기
+
+이미 만들어진 웹사이트가 있는데 React를 추가하고 싶으신가요? **전체를 다시 만들 필요 없습니다!** 조금씩 React를 추가할 수 있습니다!
+
+:::info 이 문서를 읽기 전에
+- ⏰ 예상 소요 시간: 50-60분
+- 🎯 기존 사이트에 React를 점진적으로 추가하는 방법 이해
+- 📚 "기존 프로젝트"란 무엇인지부터 설명
+- ☕ 천천히 따라해보세요!
+:::
+
+---
+
+## 목차
+
+1. [왜 기존 프로젝트에 추가하나요?](#왜-기존-프로젝트에-추가하나요)
+2. [두 가지 시나리오](#두-가지-시나리오)
+3. [전체 서브라우트에 React 사용](#전체-서브라우트에-react-사용)
+4. [페이지 일부분만 React 사용](#페이지-일부분만-react-사용)
+5. [React Native 추가](#react-native-추가)
+
+---
+
+## 왜 기존 프로젝트에 추가하나요?
+
+### 기존 프로젝트가 뭔가요?
+
+**기존 프로젝트** = 이미 운영 중인 웹사이트/앱
+
+```
+예시:
+
+1. 회사 홈페이지
+   - 2019년에 만듦
+   - HTML + CSS + jQuery
+   - 지금도 잘 작동 중
+   - 하지만 인터랙티브 기능 추가하고 싶음
+
+2. 쇼핑몰
+   - WordPress로 만듦
+   - 제품 목록, 장바구니 있음
+   - 실시간 채팅 기능 추가하고 싶음
+
+3. 블로그
+   - Jekyll로 만듦
+   - 정적 사이트
+   - 댓글 시스템을 React로 만들고 싶음
+
+→ 이런 것들이 "기존 프로젝트"
+```
+
+### 왜 전체를 다시 안 만드나요?
+
+```
+전체를 React로 다시 만들기:
+❌ 시간: 3-6개월
+❌ 비용: 엄청남
+❌ 위험: 기존 기능 망가질 수 있음
+❌ 다운타임: 서비스 중단
+
+기존 프로젝트에 조금씩 추가:
+✅ 시간: 1-2주
+✅ 비용: 적음
+✅ 위험: 낮음 (기존 코드 유지)
+✅ 다운타임: 없음 (점진적 추가)
+```
+
+**실생활 비유:**
+
+```
+집 리모델링:
+
+방법 1: 전체 철거 후 재건축
+- 시간: 1년
+- 비용: 5억
+- 그동안 어디서 살까?
+- 위험: 매우 큼
+
+방법 2: 한 방씩 리모델링
+- 시간: 3개월
+- 비용: 5천만원
+- 다른 방에서 생활 가능
+- 위험: 낮음
+
+→ 대부분 방법 2 선택!
+```
+
+### React를 추가하면 좋은 점
+
+```
+기존 사이트 유지하면서:
+✅ 인터랙티브 컴포넌트 추가
+✅ 사용자 경험 개선
+✅ 최신 기술 사용
+✅ 점진적 개선
+
+예시:
+- 정적 블로그 + React 댓글 시스템
+- WordPress + React 실시간 채팅
+- Rails 앱 + React 대시보드
+- 기존 사이트 + React 위젯
+```
+
+---
+
+## Node.js가 필요합니다
+
+### Node.js가 뭔가요?
+
+```
+Node.js:
+- JavaScript를 컴퓨터에서 실행하게 해주는 프로그램
+- 원래 JavaScript는 브라우저에서만 작동
+- Node.js 덕분에 어디서든 실행 가능
+
+왜 필요한가요?
+- npm (패키지 관리자) 사용하려면 필요
+- React 설치하려면 npm 필요
+- 빌드 도구 실행하려면 필요
+```
+
+### Node.js 설치
+
+```bash
+# 1. 공식 사이트 방문
+https://nodejs.org
+
+# 2. LTS 버전 다운로드
+   (LTS = Long Term Support = 안정적)
+
+# 3. 설치 프로그램 실행
+   - 기본 설정으로 진행
+   - "Next" 계속 클릭
+
+# 4. 설치 확인
+node --version
+# v20.10.0 같은 버전 나오면 성공!
+
+npm --version
+# 10.2.3 같은 버전 나오면 성공!
+```
+
+:::tip CDN 방식도 있습니다
+간단한 테스트라면 Node.js 없이도 가능합니다!
+```html
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+```
+하지만 실제 개발에는 Node.js 설치를 권장합니다.
+:::
+
+---
+
+## 두 가지 시나리오
+
+React를 추가하는 방법은 크게 **두 가지**입니다:
+
+```
+시나리오 1: 전체 서브라우트에 React 사용
+example.com/           ← 기존 사이트 (Rails 등)
+example.com/about      ← 기존 사이트
+example.com/blog       ← 기존 사이트
+example.com/dashboard/ ← React 앱! (전체)
+           └─ /profile  ← React
+           └─ /settings ← React
+           └─ /billing  ← React
+
+시나리오 2: 페이지 일부분만 React 사용
+┌─────────────────────────┐
+│  Header (기존 HTML)      │
+├─────────────────────────┤
+│                         │
+│  콘텐츠 (기존 HTML)      │
+│                         │
+│  ┌──────────────────┐  │
+│  │ React 채팅 위젯   │  │ ← React!
+│  └──────────────────┘  │
+│                         │
+│  Footer (기존 HTML)      │
+└─────────────────────────┘
+```
+
+---
+
+## 시나리오 1: 전체 서브라우트에 React 사용
+
+### 서브라우트가 뭔가요?
+
+**서브라우트** = URL의 일부분, 하위 경로
+
+```
+예시:
+
+메인 사이트: https://example.com
+서브라우트: https://example.com/dashboard
+           ↑                    ↑
+         도메인              서브라우트
+
+더 깊은 서브라우트:
+https://example.com/dashboard/profile
+                              ↑
+                         서브 서브라우트
+```
+
+### 실제 사용 사례
+
+```
+사례 1: 전자상거래 사이트
+기존 사이트 (WordPress):
+- example.com/          (홈)
+- example.com/products  (상품 목록)
+- example.com/contact   (문의)
+
+새로운 관리자 패널 (React):
+- example.com/admin/           (대시보드)
+- example.com/admin/products   (상품 관리)
+- example.com/admin/orders     (주문 관리)
+
+사례 2: 회사 홈페이지
+기존 사이트 (정적 HTML):
+- example.com/        (홈)
+- example.com/about   (소개)
+
+새로운 고객 포털 (React):
+- example.com/portal/          (포털 홈)
+- example.com/portal/tickets   (티켓)
+- example.com/portal/billing   (청구)
+```
+
+### 설정 방법 (3단계)
+
+#### Step 1: React 앱 만들기
+
+```bash
+# Next.js로 React 앱 생성
+npx create-next-app@latest my-dashboard
+
+cd my-dashboard
+npm run dev
+
+# 또는 Vite
+npm create vite@latest my-dashboard -- --template react
+cd my-dashboard
+npm install
+npm run dev
+```
+
+**왜 프레임워크를 사용하나요?**
+
+```
+순수 React만 사용하면:
+- 라우팅 직접 구현
+- 빌드 설정 직접
+- 배포 설정 직접
+→ 어려움!
+
+Next.js/Vite 사용하면:
+- 라우팅 자동
+- 빌드 설정 완료
+- 배포 쉬움
+→ 쉬움!
+```
+
+#### Step 2: 베이스 경로 설정
+
+**베이스 경로** = React 앱이 시작하는 URL
+
+```
+베이스 경로가 /dashboard라면:
+- example.com/dashboard       ← React 앱 홈
+- example.com/dashboard/users ← React 앱 페이지
+
+베이스 경로 설정 안 하면:
+- example.com/              ← React가 이것도 처리하려고 함
+- example.com/about         ← 기존 사이트 망가짐!
+→ 꼭 설정해야 함!
+```
+
+**Next.js 설정:**
+
+```javascript
+// next.config.js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  basePath: '/dashboard',  // ← 베이스 경로 설정!
+  
+  // 옵션: 정적 export (서버 없이)
+  output: 'export'
+};
+
+module.exports = nextConfig;
+```
+
+**코드 설명:**
+
+```javascript
+basePath: '/dashboard'
+// 의미: 이 React 앱은 /dashboard에서 시작함
+
+// 결과:
+// app/page.tsx → example.com/dashboard/
+// app/users/page.tsx → example.com/dashboard/users
+// app/settings/page.tsx → example.com/dashboard/settings
+
+// /dashboard 없는 URL은 건드리지 않음:
+// example.com/ → 기존 사이트 (안전!)
+// example.com/about → 기존 사이트 (안전!)
+```
+
+**Gatsby 설정:**
+
+```javascript
+// gatsby-config.js
+module.exports = {
+  pathPrefix: '/dashboard',  // ← 베이스 경로
+  
+  // 나머지 설정...
+  plugins: [
+    // ...
+  ]
+};
+```
+
+**Vite 설정 (SPA):**
+
+```javascript
+// vite.config.js
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  base: '/dashboard/',  // ← 베이스 경로 (끝에 / 필수!)
+  plugins: [react()],
+  build: {
+    outDir: 'dist'
+  }
+});
+```
+
+**React Router 설정 (SPA):**
+
+```jsx
+import { BrowserRouter } from 'react-router-dom';
+
+function App() {
+  return (
+    <BrowserRouter basename="/dashboard">
+      {/* 모든 라우트가 /dashboard 아래에 */}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        {/* 실제 URL: /dashboard/ */}
+        
+        <Route path="/users" element={<Users />} />
+        {/* 실제 URL: /dashboard/users */}
+      </Routes>
+    </BrowserRouter>
+  );
+}
+```
+
+#### Step 3: 서버/프록시 설정
+
+**왜 서버 설정이 필요한가요?**
+
+```
+서버가 요청을 어디로 보낼지 결정해야 함:
+
+example.com/ 접속
+    ↓
+서버: "기존 사이트로 보내기"
+    ↓
+기존 사이트 표시
+
+example.com/dashboard 접속
+    ↓
+서버: "React 앱으로 보내기"
+    ↓
+React 앱 표시
+
+설정 안 하면:
+- 모든 요청이 기존 사이트로만 감
+- React 앱 접근 불가!
+```
+
+**Nginx 설정 예시:**
+
+```nginx
+# nginx.conf
+server {
+  listen 80;
+  server_name example.com;
+  
+  # 기존 사이트 루트
+  root /var/www/existing-site;
+  
+  # /dashboard로 시작하는 요청은 React 앱으로
+  location /dashboard {
+    alias /var/www/react-app;
+    try_files $uri $uri/ /dashboard/index.html;
+  }
+  
+  # 나머지 요청은 기존 사이트로
+  location / {
+    try_files $uri $uri/ =404;
+  }
+}
+```
+
+**코드 설명:**
+
+```nginx
+location /dashboard {
+  # /dashboard로 시작하는 URL은 여기로
+
+  alias /var/www/react-app;
+  # React 앱 파일들의 위치
+
+  try_files $uri $uri/ /dashboard/index.html;
+  # 파일 찾기 → 폴더 찾기 → index.html로
+  # SPA라서 모든 요청이 index.html로 가야 함
+}
+```
+
+**Apache (.htaccess) 설정:**
+
+```apache
+# .htaccess (기존 사이트 루트)
+
+# /dashboard 요청은 React 앱 폴더로
+RewriteEngine On
+RewriteBase /
+
+# /dashboard로 시작하면 react-app 폴더로
+RewriteCond %{REQUEST_URI} ^/dashboard
+RewriteRule ^dashboard/(.*)$ /react-app/$1 [L]
+
+# 나머지는 기존 처리
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+```
+
+**Node.js/Express 프록시:**
+
+```javascript
+// server.js
+const express = require('express');
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
+const app = express();
+
+// 기존 사이트 (예: Rails)
+app.use('/', (req, res, next) => {
+  if (req.path.startsWith('/dashboard')) {
+    return next();  // /dashboard는 건너뜀
+  }
+  // 기존 서버로 프록시
+  // (Rails, Django 등이 여기서 처리)
+});
+
+// React 앱 (정적 파일)
+app.use('/dashboard', express.static('path/to/react-build'));
+
+// React 라우팅 (SPA)
+app.get('/dashboard/*', (req, res) => {
+  res.sendFile('path/to/react-build/index.html');
+});
+
+app.listen(3000);
+```
+
+**Vercel 설정 (Next.js):**
+
+```json
+{
+  "rewrites": [
+    {
+      "source": "/dashboard/:path*",
+      "destination": "https://your-nextjs-app.vercel.app/dashboard/:path*"
+    }
+  ]
+}
+```
+
+### 정리: 전체 흐름
+
+```
+1. React 앱 개발
+   ├─ Next.js/Vite로 생성
+   ├─ /dashboard 경로에 맞춰 개발
+   └─ npm run build
+
+2. 빌드 결과물 배포
+   ├─ dist/ 또는 .next/ 폴더
+   └─ 서버의 /react-app 폴더로 복사
+
+3. 서버 설정
+   ├─ /dashboard → React 앱
+   └─ 나머지 → 기존 사이트
+
+4. 테스트
+   ├─ example.com/ → 기존 사이트 ✅
+   ├─ example.com/about → 기존 사이트 ✅
+   └─ example.com/dashboard → React 앱 ✅
+```
+
+---
+
+## 시나리오 2: 페이지 일부분만 React 사용
+
+### 언제 이 방법을 쓰나요?
+
+```
+사용 사례:
+
+1. 기존 블로그에 댓글 시스템 추가
+   ┌──────────────────┐
+   │ 제목 (기존 HTML)  │
+   │ 본문 (기존 HTML)  │
+   │ ┌──────────────┐ │
+   │ │React 댓글 위젯│ │ ← React!
+   │ └──────────────┘ │
+   └──────────────────┘
+
+2. WordPress 사이트에 채팅 추가
+   ┌──────────────────┐
+   │ Header (WP)      │
+   │ Content (WP)     │
+   │ ┌──────────────┐ │
+   │ │React 채팅    │ │ ← React!
+   │ └──────────────┘ │
+   │ Footer (WP)      │
+   └──────────────────┘
+
+3. 기존 페이지에 인터랙티브 차트
+   ┌──────────────────┐
+   │ 통계 (HTML)      │
+   │ ┌──────────────┐ │
+   │ │React 차트    │ │ ← React!
+   │ └──────────────┘ │
+   └──────────────────┘
+```
+
+### 2단계 과정
+
+```
+Step 1: JavaScript 환경 설정
+  └─ JSX 사용 가능하게
+  └─ import/export 가능하게
+  └─ npm 패키지 사용 가능하게
+
+Step 2: React 컴포넌트 렌더링
+  └─ 원하는 위치에 React 삽입
+  └─ 기존 HTML과 공존
+```
+
+---
+
+## Step 1: 모듈러 JavaScript 환경 설정
+
+### 모듈러 JavaScript가 뭔가요?
+
+**모듈러 (Modular)** = 코드를 파일로 나누는 것
+
+```
+모듈러가 아닌 코드 (옛날 방식):
+┌──────────────────────────┐
+│ script.js (1000줄)        │
+│ - 모든 코드가 한 파일     │
+│ - 재사용 어려움           │
+│ - 관리 어려움             │
+└──────────────────────────┘
+
+모듈러 코드 (현대 방식):
+┌──────────────────────────┐
+│ App.js                   │
+│ Button.js                │
+│ Header.js                │
+│ utils.js                 │
+│ - 파일별로 분리          │
+│ - import/export          │
+│ - 재사용 쉬움            │
+└──────────────────────────┘
+```
+
+### 왜 모듈러 환경이 필요한가요?
+
+```
+React 사용하려면:
+
+1. JSX 문법
+   <div>Hello</div>  ← 브라우저는 이해 못 함
+
+2. import 문법
+   import React from 'react';  ← 변환 필요
+
+3. npm 패키지
+   import { Button } from 'antd';  ← 번들링 필요
+
+→ 모듈러 환경 = 이것들을 가능하게!
+```
+
+### 두 가지 경우
+
+#### 경우 1: 이미 빌드 시스템이 있는 경우
+
+```
+이미 있다면:
+✅ Webpack 사용 중
+✅ Vite 사용 중
+✅ Parcel 사용 중
+✅ Create React App 사용 중
+
+확인 방법:
+- package.json에 "build" 스크립트 있음
+- import 문법 사용 중
+- npm run build 명령어 작동
+
+→ 그대로 사용! React만 추가하면 됨
+```
+
+**JSX 지원 확인:**
+
+```javascript
+// 아무 JS 파일에 이 코드 작성
+const element = <div />;
+
+// 에러 나면: JSX 설정 필요
+// 에러 안 나면: 이미 설정됨!
+```
+
+**Babel 설정 (JSX 지원):**
+
+```bash
+# Babel 설치
+npm install --save-dev @babel/core @babel/preset-react
+
+# .babelrc 파일 생성
+{
+  "presets": ["@babel/preset-react"]
+}
+
+# 이제 JSX 사용 가능!
+```
+
+#### 경우 2: 빌드 시스템이 없는 경우
+
+```
+없다면:
+❌ 평범한 HTML 파일
+❌ <script src="script.js">만 사용
+❌ import 문법 사용 안 함
+
+→ Vite 설치!
+```
+
+**Vite 설정 (가장 쉬움!):**
+
+```bash
+# 1. Vite 설치
+npm install --save-dev vite @vitejs/plugin-react
+
+# 2. vite.config.js 생성
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  build: {
+    outDir: 'dist',
+    rollupOptions: {
+      input: {
+        main: 'src/main.jsx'  // 진입점
+      }
+    }
+  }
+});
+
+# 3. package.json에 스크립트 추가
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  }
+}
+
+# 4. 개발 서버 시작
+npm run dev
+```
+
+**백엔드 프레임워크와 통합:**
+
+```
+Rails와 Vite:
+https://github.com/ElMassimo/vite_ruby
+
+Django와 Vite:
+https://github.com/MrBin99/django-vite
+
+Laravel와 Vite:
+https://laravel-vite.dev
+
+WordPress와 Vite:
+https://github.com/kucrut/vite-for-wp
+
+→ 각 프레임워크별 가이드 참조!
+```
+
+### React 설치 및 테스트
+
+```bash
+# 1. React 설치
+npm install react react-dom
+
+# 2. 메인 JavaScript 파일 수정
+# (index.js, main.js, app.js 등)
+```
+
+**테스트 코드 (index.js):**
+
+```javascript
+import { createRoot } from 'react-dom/client';
+
+// 기존 HTML 내용 지우기 (테스트용!)
+document.body.innerHTML = '<div id="app"></div>';
+
+// React 컴포넌트 렌더링
+const root = createRoot(document.getElementById('app'));
+root.render(<h1>Hello, world</h1>);
+```
+
+**코드 설명:**
+
+```javascript
+import { createRoot } from 'react-dom/client';
+// React 18의 새로운 API
+// createRoot = React를 DOM에 연결하는 함수
+
+document.body.innerHTML = '<div id="app"></div>';
+// 테스트용: 기존 HTML 전부 지우기
+// 나중에 이 줄은 삭제할 것!
+
+const root = createRoot(document.getElementById('app'));
+// 1. getElementById로 <div id="app"> 찾기
+// 2. createRoot로 React 루트 만들기
+
+root.render(<h1>Hello, world</h1>);
+// React 컴포넌트를 화면에 그리기
+// <h1>Hello, world</h1>이 보이면 성공!
+```
+
+**확인:**
+
+```bash
+# 개발 서버 실행
+npm run dev
+
+# 브라우저에서 확인
+# "Hello, world" 보이면 성공! ✅
+```
+
+:::tip 문제 해결
+**"Hello, world"가 안 보이면:**
+1. 콘솔(F12)에서 에러 확인
+2. JSX 변환 설정 확인 (.babelrc)
+3. React 설치 확인 (package.json)
+4. Vite 설정 확인 (vite.config.js)
+
+**여전히 안 되면:**
+- [커뮤니티](https://react.dev/community)에 질문
+- [Vite Discord](https://chat.vitejs.dev)에 질문
+:::
+
+---
+
+## Step 2: 페이지 특정 위치에 React 렌더링
+
+### 테스트 코드 제거
+
+이전 단계의 테스트 코드를 **제거**합니다:
+
+```javascript
+// ❌ 이 코드들 삭제!
+document.body.innerHTML = '<div id="app"></div>';
+const root = createRoot(document.getElementById('app'));
+root.render(<h1>Hello, world</h1>);
+
+// 왜? 기존 HTML을 전부 지워버리니까!
+```
+
+### HTML에 React 컨테이너 추가
+
+**React를 넣고 싶은 위치**에 `id` 속성을 가진 요소를 추가합니다:
+
+```html
+<!-- index.html 또는 서버 템플릿 -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>내 웹사이트</title>
+</head>
+<body>
+  <!-- 기존 헤더 -->
+  <header>
+    <h1>내 웹사이트</h1>
+  </header>
+  
+  <!-- 기존 내비게이션 -->
+  <nav id="navigation">
+    <!-- 여기에 React 네비게이션 들어갈 예정! -->
+  </nav>
+  
+  <!-- 기존 메인 콘텐츠 -->
+  <main>
+    <h2>환영합니다</h2>
+    <p>이것은 기존 HTML 콘텐츠입니다.</p>
+  </main>
+  
+  <!-- React 채팅 위젯을 넣을 위치 -->
+  <div id="chat-widget"></div>
+  
+  <!-- 기존 푸터 -->
+  <footer>
+    <p>&copy; 2024 My Website</p>
+  </footer>
+  
+  <!-- JavaScript 로드 -->
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>
+```
+
+**주의사항:**
+
+```html
+<!-- ✅ 좋은 ID 이름 -->
+<nav id="navigation"></nav>
+<div id="chat-widget"></div>
+<div id="comments-section"></div>
+
+<!-- ❌ 나쁜 ID 이름 -->
+<div id="div1"></div>  ← 의미 없음
+<div id="react"></div>  ← 여러 곳에 쓰면 충돌
+<div id="app"></div>    ← 너무 일반적
+
+<!-- 💡 팁: 고유하고 의미 있는 ID 사용! -->
+```
+
+### React 컴포넌트 렌더링
+
+```jsx
+// src/main.jsx
+import { createRoot } from 'react-dom/client';
+
+// React 컴포넌트 정의
+function NavigationBar() {
+  return (
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </nav>
+  );
+}
+
+// HTML에서 React를 넣을 위치 찾기
+const navContainer = document.getElementById('navigation');
+
+// React 렌더링
+if (navContainer) {  // 요소가 있는지 확인!
+  const root = createRoot(navContainer);
+  root.render(<NavigationBar />);
+}
+```
+
+**코드 한 줄씩 설명:**
+
+```javascript
+function NavigationBar() {
+  // React 컴포넌트
+  // 네비게이션 바를 만드는 함수
+  return (
+    <nav>
+      {/* JSX로 HTML 구조 정의 */}
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+      </ul>
+    </nav>
+  );
+}
+
+const navContainer = document.getElementById('navigation');
+// HTML에서 id="navigation"인 요소 찾기
+// <nav id="navigation"></nav> 이걸 찾음
+
+if (navContainer) {
+  // 요소가 존재하는지 확인
+  // 없으면 에러 나니까!
+
+  const root = createRoot(navContainer);
+  // navContainer를 React 루트로 만들기
+
+  root.render(<NavigationBar />);
+  // NavigationBar 컴포넌트를 렌더링
+  // <nav id="navigation"> 안에 들어감!
+}
+```
+
+**결과:**
+
+```html
+<!-- 렌더링 전 -->
+<nav id="navigation"></nav>
+
+<!-- 렌더링 후 -->
+<nav id="navigation">
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+</nav>
+```
+
+### 여러 컴포넌트 렌더링
+
+```jsx
+// src/main.jsx
+import { createRoot } from 'react-dom/client';
+
+// 컴포넌트 1: 네비게이션
+function NavigationBar() {
+  return (
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+      </ul>
+    </nav>
+  );
+}
+
+// 컴포넌트 2: 채팅 위젯
+function ChatWidget() {
+  const [messages, setMessages] = useState([]);
+  
+  return (
+    <div className="chat-widget">
+      <h3>실시간 채팅</h3>
+      <div className="messages">
+        {messages.map(msg => (
+          <p key={msg.id}>{msg.text}</p>
+        ))}
+      </div>
+      <input type="text" placeholder="메시지 입력..." />
+    </div>
+  );
+}
+
+// 컴포넌트 3: 댓글 섹션
+function CommentsSection() {
+  return (
+    <div className="comments">
+      <h3>댓글</h3>
+      <p>첫 댓글을 남겨보세요!</p>
+    </div>
+  );
+}
+
+// 각 컴포넌트를 해당 위치에 렌더링
+const containers = [
+  { id: 'navigation', component: <NavigationBar /> },
+  { id: 'chat-widget', component: <ChatWidget /> },
+  { id: 'comments-section', component: <CommentsSection /> }
+];
+
+containers.forEach(({ id, component }) => {
+  const element = document.getElementById(id);
+  if (element) {
+    const root = createRoot(element);
+    root.render(component);
+  }
+});
+```
+
+### 점진적 마이그레이션
+
+```
+1주차: 작은 위젯부터
+  └─ "좋아요" 버튼 React로
+  └─ 댓글 폼 React로
+
+2주차: 인터랙티브 컴포넌트
+  └─ 검색 자동완성 React로
+  └─ 드롭다운 메뉴 React로
+
+3주차: 복잡한 기능
+  └─ 실시간 채팅 React로
+  └─ 대시보드 일부 React로
+
+...점점 확대...
+
+3개월 후: 전체 페이지 React
+  └─ 이제 프레임워크로 전환 고려!
+```
+
+**Meta(Facebook)의 경험:**
+
+```
+Meta에서 React를 처음 도입할 때:
+
+초기:
+- 작은 버튼부터 시작
+- "좋아요" 버튼을 React로
+
+1년 후:
+- 댓글, 알림도 React로
+
+수년 후:
+- 대부분의 기능이 React로
+
+현재:
+- 거의 모든 것이 React
+
+→ 점진적 도입의 좋은 예!
+```
+
+---
+
+## 실전 예제
+
+### 예제 1: WordPress에 React 댓글 추가
+
+**Step 1: WordPress 테마 수정**
+
+```php
+<!-- single.php (WordPress 테마 파일) -->
+<article>
+  <?php the_title('<h1>', '</h1>'); ?>
+  <?php the_content(); ?>
+  
+  <!-- React 댓글 위젯을 넣을 위치 -->
+  <div id="react-comments"></div>
+  
+  <!-- React 스크립트 로드 -->
+  <?php wp_enqueue_script('react-comments', get_template_directory_uri() . '/dist/comments.js', array(), '1.0', true); ?>
+</article>
+```
+
+**Step 2: React 컴포넌트 작성**
+
+```jsx
+// src/comments.jsx
+import { createRoot } from 'react-dom/client';
+import { useState, useEffect } from 'react';
+
+function Comments({ postId }) {
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
+  
+  useEffect(() => {
+    // WordPress REST API로 댓글 가져오기
+    fetch(`/wp-json/wp/v2/comments?post=${postId}`)
+      .then(res => res.json())
+      .then(data => setComments(data));
+  }, [postId]);
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // 댓글 등록 API 호출
+    // ...
+  };
+  
+  return (
+    <div className="react-comments">
+      <h3>댓글 {comments.length}개</h3>
+      
+      <form onSubmit={handleSubmit}>
+        <textarea
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+          placeholder="댓글을 입력하세요..."
+        />
+        <button type="submit">등록</button>
+      </form>
+      
+      <div className="comments-list">
+        {comments.map(comment => (
+          <div key={comment.id} className="comment">
+            <strong>{comment.author_name}</strong>
+            <p>{comment.content.rendered}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// WordPress에서 postId 가져오기
+const postId = document.body.dataset.postId;  // PHP에서 설정
+
+const container = document.getElementById('react-comments');
+if (container) {
+  const root = createRoot(container);
+  root.render(<Comments postId={postId} />);
+}
+```
+
+**Step 3: 빌드 및 배포**
+
+```bash
+# 빌드
+npm run build
+
+# dist/comments.js 파일이 생성됨
+# WordPress 테마 폴더에 복사
+cp dist/comments.js wp-content/themes/my-theme/dist/
+```
+
+### 예제 2: Rails 앱에 React 대시보드 추가
+
+**Step 1: Rails에서 Vite 설정**
+
+```bash
+# vite_ruby gem 설치
+bundle add vite_rails
+
+# Vite 설치
+bundle exec vite install
+```
+
+**Step 2: React 컴포넌트 작성**
+
+```jsx
+// app/frontend/entrypoints/dashboard.jsx
+import { createRoot } from 'react-dom/client';
+import Dashboard from '../components/Dashboard';
+
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('react-dashboard');
+  if (container) {
+    const root = createRoot(container);
+    root.render(<Dashboard />);
+  }
+});
+```
+
+**Step 3: Rails 뷰에 추가**
+
+```erb
+<!-- app/views/admin/dashboard.html.erb -->
+<h1>관리자 대시보드</h1>
+
+<!-- React 컴포넌트 컨테이너 -->
+<div id="react-dashboard"></div>
+
+<!-- Vite로 빌드된 JavaScript 로드 -->
+<%= vite_javascript_tag 'dashboard' %>
+```
+
+### 예제 3: 정적 HTML에 React 위젯 추가
+
+**HTML 파일:**
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>내 블로그</title>
+</head>
+<body>
+  <header>
+    <h1>내 블로그</h1>
+  </header>
+  
+  <article>
+    <h2>React 배우기</h2>
+    <p>React는 사용자 인터페이스를 만드는...</p>
+  </article>
+  
+  <!-- React 위젯들 -->
+  <div id="like-button"></div>
+  <div id="share-buttons"></div>
+  <div id="related-posts"></div>
+  
+  <!-- Vite로 빌드된 스크립트 -->
+  <script type="module" src="/dist/widgets.js"></script>
+</body>
+</html>
+```
+
+**React 위젯:**
+
+```jsx
+// src/widgets.jsx
+import { createRoot } from 'react-dom/client';
+
+// 좋아요 버튼
+function LikeButton() {
+  const [liked, setLiked] = useState(false);
+  const [count, setCount] = useState(0);
+  
+  return (
+    <button onClick={() => {
+      setLiked(!liked);
+      setCount(liked ? count - 1 : count + 1);
+    }}>
+      {liked ? '❤️' : '🤍'} {count}
+    </button>
+  );
+}
+
+// 공유 버튼
+function ShareButtons() {
+  const url = window.location.href;
+  
+  return (
+    <div className="share-buttons">
+      <button onClick={() => {/* 트위터 공유 */}}>
+        Twitter
+      </button>
+      <button onClick={() => {/* 페이스북 공유 */}}>
+        Facebook
+      </button>
+    </div>
+  );
+}
+
+// 관련 글
+function RelatedPosts() {
+  const [posts, setPosts] = useState([]);
+  
+  useEffect(() => {
+    fetch('/api/related-posts')
+      .then(res => res.json())
+      .then(data => setPosts(data));
+  }, []);
+  
+  return (
+    <div className="related-posts">
+      <h3>관련 글</h3>
+      {posts.map(post => (
+        <a key={post.id} href={post.url}>
+          {post.title}
+        </a>
+      ))}
+    </div>
+  );
+}
+
+// 각 위젯 렌더링
+const widgets = {
+  'like-button': <LikeButton />,
+  'share-buttons': <ShareButtons />,
+  'related-posts': <RelatedPosts />
+};
+
+Object.entries(widgets).forEach(([id, component]) => {
+  const element = document.getElementById(id);
+  if (element) {
+    const root = createRoot(element);
+    root.render(component);
+  }
+});
+```
+
+---
+
+## React Native 추가 (모바일 앱)
+
+### React Native가 뭔가요?
+
+```
+React Native:
+- React로 네이티브 모바일 앱 만들기
+- iOS + Android 동시 개발
+- JavaScript/React 사용
+
+기존 네이티브 앱:
+- Android: Java/Kotlin
+- iOS: Objective-C/Swift
+- 따로 개발
+
+React Native 추가:
+- 기존 앱 유지
+- 일부 화면만 React Native로
+- 점진적 도입
+```
+
+### 언제 사용하나요?
+
+```
+사용 사례:
+
+1. 레거시 앱 개선
+   - 10년 된 앱
+   - 일부 화면만 새로 만들기
+   - React Native로 빠르게 개발
+
+2. 특정 기능 추가
+   - 설정 화면 React Native로
+   - 프로필 화면 React Native로
+   - 나머지는 네이티브 유지
+
+3. 팀 역량
+   - 웹 개발자가 많음
+   - React Native로 모바일 참여
+   - 네이티브 개발자는 핵심 기능
+```
+
+### 설정 방법
+
+공식 가이드를 참조하세요:
+- [Android (Java/Kotlin)](https://reactnative.dev/docs/integration-with-existing-apps)
+- [iOS (Objective-C/Swift)](https://reactnative.dev/docs/integration-with-existing-apps)
+
+**기본 단계:**
+
+```
+1. React Native 설치
+   npm install react-native
+
+2. 네이티브 프로젝트 설정
+   - Android: build.gradle 수정
+   - iOS: Podfile 수정
+
+3. React Native 화면 생성
+   - JavaScript로 화면 작성
+   - 컴포넌트 구현
+
+4. 네이티브 코드에서 호출
+   - Android: Activity에서 렌더링
+   - iOS: ViewController에서 렌더링
+
+5. 빌드 및 테스트
+```
+
+**Android 예시 (간략):**
+
+```kotlin
+// MainActivity.kt
+class MyReactActivity : Activity(), DefaultHardwareBackBtnHandler {
+    private lateinit var reactRootView: ReactRootView
+    private lateinit var reactInstanceManager: ReactInstanceManager
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        reactRootView = ReactRootView(this)
+        reactInstanceManager = ReactInstanceManager.builder()
+            .setApplication(application)
+            .setCurrentActivity(this)
+            .setBundleAssetName("index.android.bundle")
+            .setJSMainModulePath("index")
+            .addPackage(MainReactPackage())
+            .setUseDeveloperSupport(BuildConfig.DEBUG)
+            .setInitialLifecycleState(LifecycleState.RESUMED)
+            .build()
+
+        // "MyReactApp"은 JavaScript에서 등록한 이름
+        reactRootView.startReactApplication(
+            reactInstanceManager,
+            "MyReactApp",
+            null
+        )
+
+        setContentView(reactRootView)
+    }
+}
+```
+
+**JavaScript (React Native):**
+
+```jsx
+// index.js
+import { AppRegistry } from 'react-native';
+import { MyReactApp } from './MyReactApp';
+
+AppRegistry.registerComponent('MyReactApp', () => MyReactApp);
+```
+
+:::warning React Native는 복잡합니다
+React Native를 기존 앱에 추가하는 것은:
+- 매우 복잡함
+- 네이티브 지식 필요
+- 빌드 설정 어려움
+
+**추천:**
+- 먼저 Expo로 새 앱 만들어보기
+- React Native 익숙해지기
+- 그 다음 기존 앱에 통합 시도
+:::
+
+---
+
+## 자주 묻는 질문
+
+### Q1: React를 추가하면 기존 코드가 망가지나요?
+
+```
+A: 아니요, 안전합니다!
+
+React는 지정한 위치에만 렌더링:
+<div id="react-here"></div>  ← 여기만 React
+나머지는 그대로 유지
+
+예시:
+<nav id="navigation">  ← React 네비게이션
+<main>                ← 기존 HTML (안전!)
+  <p>내용...</p>
+</main>
+<div id="chat"></div>  ← React 채팅
+```
+
+### Q2: 성능이 느려지나요?
+
+```
+A: 오히려 빨라질 수 있습니다!
+
+React의 장점:
+✅ 가상 DOM으로 효율적 업데이트
+✅ 필요한 부분만 재렌더링
+✅ 최적화된 이벤트 처리
+
+주의사항:
+- React 자체는 ~42KB (gzip)
+- 필요한 곳에만 사용
+- 작은 버튼 하나에 React는 과함
+```
+
+### Q3: SEO에 문제 없나요?
+
+```
+A: 페이지 일부만 React라면 괜찮습니다!
+
+괜찮은 경우:
+✅ 기존 HTML은 서버에서 렌더링됨
+✅ React는 인터랙티브 위젯만
+✅ 구글이 기존 콘텐츠는 다 봄
+
+예: 블로그 + React 댓글
+- 블로그 글: 서버 HTML (SEO ✅)
+- 댓글: React (SEO 불필요)
+
+문제 될 수 있는 경우:
+❌ 전체 페이지가 React
+❌ 중요 콘텐츠가 React로만
+→ 이럴 땐 Next.js 같은 프레임워크 사용
+```
+
+### Q4: jQuery와 함께 사용할 수 있나요?
+
+```
+A: 네, 가능합니다!
+
+주의사항:
+- 같은 DOM 요소를 건드리지 않기
+- jQuery는 기존 코드
+- React는 새 기능만
+
+나쁜 예:
+<div id="menu"></div>
+jQuery가 #menu 조작
+React도 #menu 조작
+→ 충돌!
+
+좋은 예:
+<div id="jquery-menu"></div>     ← jQuery
+<div id="react-chat"></div>      ← React
+→ 각자 다른 영역!
+```
+
+### Q5: TypeScript를 사용할 수 있나요?
+
+```
+A: 네, 사용 가능합니다!
+
+Vite + TypeScript:
+npm create vite@latest -- --template react-ts
+
+파일 확장자:
+.js  → .tsx
+.jsx → .tsx
+
+타입 체크 자동!
+```
+
+### Q6: 어디부터 시작해야 하나요?
+
+```
+A: 작은 것부터!
+
+추천 순서:
+1주차: 버튼 하나 React로
+2주차: 폼 컴포넌트
+3주차: 실시간 기능
+4주차: 대시보드 일부
+...점점 확대...
+
+피해야 할 것:
+❌ 처음부터 전체 다시 만들기
+❌ 복잡한 기능부터 시작
+❌ 기존 코드 모두 React로
+```
+
+### Q7: 팀원들이 React를 모르는데?
+
+```
+A: 점진적 학습!
+
+전략:
+1. 한 명이 먼저 학습 (1-2주)
+2. 작은 기능으로 시작
+3. 코드 리뷰하며 공유
+4. 튜토리얼 함께 진행
+5. 점점 확대
+
+리소스:
+- React 공식 튜토리얼
+- 사내 워크숍
+- 페어 프로그래밍
+```
+
+### Q8: 배포는 어떻게 하나요?
+
+```
+A: 빌드 후 서버에 업로드!
+
+프로세스:
+1. npm run build 실행
+   → dist/ 폴더 생성
+
+2. dist/ 내용을 서버로 복사
+   - FTP/SFTP
+   - Git deploy
+   - CI/CD
+
+3. 서버 설정 확인
+   - 정적 파일 경로
+   - 캐싱 설정
+
+4. 테스트
+   - 프로덕션 환경 확인
+```
+
+---
+
+## 모범 사례
+
+### 1. 작게 시작하기
+
+```
+❌ 나쁜 접근:
+"전체 사이트를 React로 다시 만들자!"
+- 3개월 소요
+- 리스크 큼
+- 팀 부담
+
+✅ 좋은 접근:
+"버튼 하나부터 React로"
+- 1주일
+- 리스크 작음
+- 학습 기회
+
+성공 사례:
+Facebook, Airbnb, Netflix
+→ 모두 작게 시작!
+```
+
+### 2. 명확한 경계 유지
+
+```
+React 영역:
+<div id="react-widget"></div>
+
+기존 코드 영역:
+나머지 모든 것
+
+규칙:
+- React는 자기 영역만
+- 기존 코드도 자기 영역만
+- 서로 건드리지 않기
+```
+
+### 3. 점진적 마이그레이션
+
+```
+단계 1: 위젯 (1-2주)
+├─ 좋아요 버튼
+├─ 공유 버튼
+└─ 간단한 폼
+
+단계 2: 기능 (2-4주)
+├─ 검색 자동완성
+├─ 실시간 알림
+└─ 채팅
+
+단계 3: 페이지 (1-2개월)
+├─ 설정 페이지
+├─ 프로필 페이지
+└─ 대시보드
+
+단계 4: 전체 (선택)
+└─ 프레임워크로 전환 고려
+```
+
+### 4. 문서화
+
+```
+팀을 위한 문서:
+- React 추가한 위치 목록
+- 빌드 방법
+- 배포 프로세스
+- 트러블슈팅
+
+README.md 예시:
+## React 컴포넌트
+
+- Navigation (`#navigation`)
+- Chat Widget (`#chat-widget`)
+- Comments (`#comments`)
+
+## 개발
+```bash
+npm run dev
+```
+
+## 빌드
+```bash
+npm run build
+```
+
+### 5. 성능 모니터링
+
+측정해야 할 것:
+- 페이지 로드 시간
+- JavaScript 번들 크기
+- 첫 렌더링 시간
+
+도구:
+- Lighthouse
+- Web Vitals
+- Chrome DevTools
+
+목표:
+- 번들 < 100KB (gzip)
+- FCP < 1.8s
+- TTI < 3.8s
+
+
+---
+
+## 다음 단계
+
+### 학습 로드맵
+
+1주차: 환경 설정
+  ├─ Vite 설치
+  ├─ React 설치
+  └─ "Hello World" 성공
+
+2주차: 작은 컴포넌트
+  ├─ 버튼 컴포넌트
+  ├─ 입력 폼
+  └─ 기존 사이트에 통합
+
+3주차: 상태 관리
+  ├─ useState 학습
+  ├─ 인터랙티브 위젯
+  └─ API 호출
+
+4주차: 실전 프로젝트
+  ├─ 채팅 위젯
+  ├─ 댓글 시스템
+  └─ 배포
+
+2개월 후:
+  ├─ 여러 컴포넌트 완성
+  ├─ 팀 공유
+  └─ 점진적 확대
+
+6개월 후:
+  ├─ 대부분 React로
+  └─ 프레임워크 전환 고려
+
+
+### 유용한 리소스
+
+**공식 문서:**
+- [React 공식 문서](https://react.dev)
+- [Vite 가이드](https://vitejs.dev/guide/)
+- [createRoot API](https://react.dev/reference/react-dom/client/createRoot)
+
+**통합 가이드:**
+- [Vite + Rails](https://vite-ruby.netlify.app)
+- [Vite + Django](https://github.com/MrBin99/django-vite)
+- [Vite + Laravel](https://laravel-vite.dev)
+- [Vite + WordPress](https://github.com/kucrut/vite-for-wp)
+
+**커뮤니티:**
+- [React Discord](https://discord.gg/react)
+- [Vite Discord](https://chat.vitejs.dev)
+- [Stack Overflow](https://stackoverflow.com/questions/tagged/reactjs)
+
+**한글 자료:**
+- [React 한글 문서](https://ko.react.dev)
+- [벨로퍼트 React 튜토리얼](https://react.vlpt.us)
+
+---
+
+## 마무리
+
+### 핵심 정리
+
+```
+✅ 전체를 다시 만들 필요 없음
+✅ 작게 시작해서 점진적 확대
+✅ 기존 코드와 공존 가능
+✅ 두 가지 방법:
+   1. 전체 서브라우트
+   2. 페이지 일부분
+
+✅ 단계:
+   1. 환경 설정 (Vite)
+   2. React 설치
+   3. 컴포넌트 작성
+   4. 원하는 위치에 렌더링
+
+✅ Meta(Facebook)도 이렇게 시작!
