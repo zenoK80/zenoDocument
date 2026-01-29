@@ -146,7 +146,7 @@ const config = {
               // { label: 'Node.js',type: 'docSidebar', sidebarId: 'nodeJsSidebar' },
             ],
           },
-          { label: '독학사1', position: 'left',activeBaseRegex: `/docs/self-taught`,
+          { label: '독학사', position: 'left',activeBaseRegex: `/docs/self-taught`,
             items: [
               { label: '기초통계학',type: 'docSidebar', sidebarId: 'basicStatisticsSidebar' },
               { label: '일반수학',type: 'docSidebar', sidebarId: 'basicMathSidebar' },
@@ -201,10 +201,19 @@ const config = {
           //   ],
           // },
           {
-            title: 'Github',
+            title: 'My',
+
             items: [
+              {
+                label: '포트폴리오',
+                href: 'https://github.com/zenoK80',
+              },
                {
                 label: '깃허브',
+                href: 'https://github.com/zenoK80',
+              },
+              {
+                label: '블로그',
                 href: 'https://github.com/zenoK80',
               },
             ],
@@ -218,23 +227,23 @@ const config = {
           //     },
           //   ],
           // },
-          {
-            title: 'Stock Contribute',
-            items: [
-               {
-                label: '미리캔버스',
-                href: 'https://www.miricanvas.com/v2/design?panel=ELEMENTS&q=@zenoK',
-              },
-              {
-                label: '네이버 OGQ',
-                href: 'https://ogqmarket.naver.com/creators/zeno',
-              },
-              {
-                label: '어도비스톡',
-                href: 'https://stock.adobe.com/kr/contributor/212833145/zeno?load_type=author&prev_url=detail',
-              },
-            ],
-          },
+          // {
+          //   title: 'Stock Contribute',
+          //   items: [
+          //      {
+          //       label: '미리캔버스',
+          //       href: 'https://www.miricanvas.com/v2/design?panel=ELEMENTS&q=@zenoK',
+          //     },
+          //     {
+          //       label: '네이버 OGQ',
+          //       href: 'https://ogqmarket.naver.com/creators/zeno',
+          //     },
+          //     {
+          //       label: '어도비스톡',
+          //       href: 'https://stock.adobe.com/kr/contributor/212833145/zeno?load_type=author&prev_url=detail',
+          //     },
+          //   ],
+          // },
 
         ],
         copyright: `Copyright © ${new Date().getFullYear()} zenoDoc, Inc.`
