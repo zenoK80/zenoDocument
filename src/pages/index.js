@@ -406,7 +406,7 @@ export default function Home() {
 
           <div className="tracks-grid">
             {/* 1. CS */}
-            <Link to="/docs/computer-since/0_data-base/database-overview" className="track-card">
+            <Link to="/docs/computer-since/data-base/database-overview" className="track-card">
               <div className="track-icon"><Icons.Cpu /></div>
               <h3 className="track-title">Computer Science</h3>
               <p className="track-desc">
@@ -416,7 +416,7 @@ export default function Home() {
             </Link>
 
             {/* 2. Web Frontend */}
-            <Link to="/docs/web-front/7_javascript/js-introduction" className="track-card">
+            <Link to="/docs/web-front/javascript/js-introduction" className="track-card">
               <div className="track-icon"><Icons.Code /></div>
               <h3 className="track-title">Web Frontend</h3>
               <p className="track-desc">
@@ -426,7 +426,7 @@ export default function Home() {
             </Link>
 
             {/* 3. Web Backend */}
-            <Link to="/docs/web-back/0_laravel/laravel-intro" className="track-card">
+            <Link to="/docs/web-back/laravel/laravel-intro" className="track-card">
               <div className="track-icon"><Icons.Server /></div>
               <h3 className="track-title">Backend & Server</h3>
               <p className="track-desc">
@@ -436,7 +436,7 @@ export default function Home() {
             </Link>
 
             {/* 4. Self Taught (Liberal Arts) */}
-            <Link to="/docs/self-taught/0_basic-statistics/basic-statistics-intro" className="track-card">
+            <Link to="/docs/self-taught/basic-statistics/basic-statistics-intro" className="track-card">
               <div className="track-icon"><Icons.BookOpen /></div>
               <h3 className="track-title">ETC</h3>
               <p className="track-desc">
@@ -446,7 +446,7 @@ export default function Home() {
             </Link>
 
             {/* 5. Design */}
-            <Link to="/docs/self-taught/0_basic-statistics/basic-statistics-intro" className="track-card">
+            <Link to="/docs/self-taught/0_basic-statistics/intro" className="track-card">
               <div className="track-icon"><Icons.BookOpen /></div>
               <h3 className="track-title">Design</h3>
               <p className="track-desc">
