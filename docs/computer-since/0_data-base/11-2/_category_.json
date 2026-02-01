@@ -1,0 +1,8 @@
+{
+  "label": "성능향상을 위한 튜닝",
+  "position": 23,
+  "link": {
+    "type": "generated-index",
+    "description": "데이터베이스 성능향상을 위한 튜닝기법"
+  }
+}

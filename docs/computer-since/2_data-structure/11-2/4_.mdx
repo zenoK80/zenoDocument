@@ -1,0 +1,426 @@
+---
+title: "너비 우선 탐색"
+description: "큐를 사용하여 BFS를 구현합니다."
+slug: "bfs"
+sidebar_position: 4
+date: "2024-01-15"
+---
+
+## 🎯 BFS의 원리
+
+**너비 우선 탐색(BFS)**은 시작 정점부터 **가까운 정점을 먼저 방문**하고, 멀리 있는 정점은 나중에 방문합니다.
+
+### DFS와의 차이
+
+```
+DFS (깊이):        BFS (너비):
+0 → 1 → 2 → 3    0 → [1,4] → [2,3,5] → ...
+ (깊게)            (넓게)
+```
+
+---
+
+## 📝 헤더 파일 및 상수 정의
+
+```c
+#include <stdio.h>      // printf, fprintf
+#include <stdlib.h>     // malloc, free, exit
+
+#define TRUE 1
+#define FALSE 0
+#define MAX_VERTEX 50
+#define MAX_QUEUE_SIZE 100  // 큐의 최대 크기
+```
+
+---
+
+## 🏗️ 큐 구조체 정의
+
+```c
+typedef int Element;    // 큐에 저장할 자료형 (정점 번호)
+
+typedef struct {
+    Element data[MAX_QUEUE_SIZE];  // 큐 데이터 저장 배열
+    int front;                     // 맨 앞 위치
+    int rear;                      // 맨 뒤 위치
+} Queue;
+```
+
+**코드 분석:**
+```c
+int front;
+→ 큐의 맨 앞 위치
+→ dequeue할 때 사용
+
+int rear;
+→ 큐의 맨 뒤 위치
+→ enqueue할 때 사용
+
+front == rear
+→ 큐가 비어있음
+
+(rear + 1) % MAX_QUEUE_SIZE == front
+→ 큐가 가득 참 (원형 큐)
+```
+
+---
+
+## ⚙️ 큐 연산 함수
+
+### 1️⃣ 큐 초기화
+
+```c
+void queue_init(Queue *q) {
+    q->front = 0;
+    q->rear = 0;
+}
+```
+
+**코드 분석:**
+```c
+q->front = 0;
+q->rear = 0;
+→ 둘 다 0으로 시작
+→ front == rear 상태 (비어있음)
+```
+
+---
+
+### 2️⃣ 큐 공백 검사
+
+```c
+int is_empty(Queue *q) {
+    // front와 rear가 같으면 비어있음
+    return (q->front == q->rear) ? TRUE : FALSE;
+}
+```
+
+**코드 분석:**
+```c
+q->front == q->rear
+→ 처음 상태로 돌아옴
+→ 모든 원소가 제거됨
+```
+
+---
+
+### 3️⃣ 큐 포화 검사
+
+```c
+int is_full(Queue *q) {
+    // rear 다음 위치가 front와 같으면 가득 참 (원형 큐)
+    return ((q->rear + 1) % MAX_QUEUE_SIZE == q->front) ? TRUE : FALSE;
+}
+```
+
+**코드 분석:**
+```c
+(q->rear + 1) % MAX_QUEUE_SIZE
+→ rear의 다음 위치 (원형이므로 모듈로 연산)
+→ 예: rear=99 → (99+1)%100 = 0
+
+== q->front
+→ 그 다음 위치가 front와 같으면
+→ 큐가 가득 차 있음 (저장할 공간 없음)
+```
+
+---
+
+### 4️⃣ ENQUEUE (큐에 삽입)
+
+```c
+void enqueue(Queue *q, Element item) {
+    // 먼저 포화 상태 확인
+    if (is_full(q)) {
+        fprintf(stderr, "Error: 큐 오버플로우!\n");
+        return;
+    }
+    
+    // rear을 하나 증가 (원형이므로 모듈로 연산)
+    q->rear = (q->rear + 1) % MAX_QUEUE_SIZE;
+    
+    // rear 위치에 데이터 저장
+    q->data[q->rear] = item;
+}
+```
+
+**코드 분석:**
+```c
+q->rear = (q->rear + 1) % MAX_QUEUE_SIZE;
+→ rear을 다음 위치로 이동
+→ 원형이므로 100이 되면 0으로 돌아옴
+→ 예: rear=99 → rear=0
+
+q->data[q->rear] = item;
+→ 새 위치에 데이터 저장
+```
+
+---
+
+### 5️⃣ DEQUEUE (큐에서 제거)
+
+```c
+Element dequeue(Queue *q) {
+    Element item;
+    
+    // 먼저 공백 상태 확인
+    if (is_empty(q)) {
+        fprintf(stderr, "Error: 큐 언더플로우!\n");
+        exit(1);
+    }
+    
+    // front를 하나 증가
+    q->front = (q->front + 1) % MAX_QUEUE_SIZE;
+    
+    // front 위치의 데이터 반환
+    return q->data[q->front];
+}
+```
+
+**코드 분석:**
+```c
+q->front = (q->front + 1) % MAX_QUEUE_SIZE;
+→ front를 다음 위치로 이동
+→ 먼저 들어온 데이터부터 제거
+
+return q->data[q->front];
+→ 그 위치의 데이터 반환
+```
+
+---
+
+## 🔍 BFS 구현
+
+```c
+// 그래프 구조체
+typedef struct {
+    int n;
+    int adj_matrix[MAX_VERTEX][MAX_VERTEX];
+} Graph;
+
+// visited 배열
+int visited[MAX_VERTEX];
+
+void bfs(Graph *g, int start) {
+    Queue q;
+    int v, w;
+    
+    // ① 큐 초기화
+    queue_init(&q);
+    
+    // ② 시작 정점을 방문했다고 표시
+    visited[start] = TRUE;
+    
+    // ③ 시작 정점을 출력
+    printf("%d ", start);
+    
+    // ④ 시작 정점을 큐에 enqueue
+    enqueue(&q, start);
+    
+    // ⑤ 큐가 비워질 때까지 반복
+    while (!is_empty(&q)) {
+        // 큐에서 정점 하나를 dequeue
+        v = dequeue(&q);
+        
+        // ⑥ v의 모든 인접 정점을 찾음
+        for (w = 0; w < g->n; w++) {
+            // v와 w 사이에 간선이 있고
+            if (g->adj_matrix[v][w] == 1) {
+                // w가 아직 방문되지 않았다면
+                if (visited[w] == FALSE) {
+                    // w를 방문했다고 표시
+                    visited[w] = TRUE;
+                    
+                    // w를 출력
+                    printf("%d ", w);
+                    
+                    // w를 큐에 enqueue
+                    enqueue(&q, w);
+                }
+            }
+        }
+    }
+}
+```
+
+**코드 분석:**
+
+```c
+queue_init(&q);
+→ 큐를 비운 상태로 초기화
+→ front = 0, rear = 0
+
+visited[start] = TRUE;
+printf("%d ", start);
+→ 시작 정점을 미리 방문 처리하고 출력
+→ 나중에 중복 enqueue 방지
+
+enqueue(&q, start);
+→ 시작 정점을 큐에 추가
+
+while (!is_empty(&q))
+→ 큐가 비워질 때까지 반복
+→ 모든 정점이 처리될 때까지
+
+v = dequeue(&q);
+→ FIFO: 먼저 들어온 것이 먼저 나옴
+→ 가까운 정점부터 처리
+
+if (visited[w] == FALSE)
+    visited[w] = TRUE;
+→ 미방문 정점을 찾으면
+→ 즉시 방문 표시 (중복 enqueue 방지)
+
+enqueue(&q, w);
+→ 미방문 인접 정점을 큐에 추가
+→ 다음 단계에서 처리
+```
+
+---
+
+## 📊 실행 흐름 예시
+
+```
+그래프:   0 ─── 1
+          │ ╲   │
+          4     3
+              ╲ │
+                2
+
+0부터 시작:
+
+1단계:
+  - 0 방문, 출력: 0
+  - 0을 큐에 추가
+  - Queue: [0]
+
+2단계:
+  - 큐에서 0 꺼냄
+  - 0의 인접: 1, 2, 4
+  - 모두 미방문 → 방문 표시, 출력: 1 2 4
+  - Queue: [1, 2, 4]
+
+3단계:
+  - 큐에서 1 꺼냄
+  - 1의 인접: 0, 3
+  - 0 방문됨, 3 미방문 → 방문 표시, 출력: 3
+  - Queue: [2, 4, 3]
+
+4단계:
+  - 큐에서 2 꺼냄
+  - 2의 인접: 0, 1, 3
+  - 모두 방문됨
+  - Queue: [4, 3]
+
+5단계:
+  - 큐에서 4 꺼냄
+  - 4의 인접: 0
+  - 0 방문됨
+  - Queue: [3]
+
+6단계:
+  - 큐에서 3 꺼냄
+  - 3의 인접: 1, 2
+  - 모두 방문됨
+  - Queue: []
+
+큐 비움 → 종료
+
+최종 출력: 0 1 2 4 3
+```
+
+---
+
+## 🔑 BFS의 특징
+
+### FIFO (First In First Out)
+
+```
+Enqueue 순서: 0 → 1 → 2 → 4
+Dequeue 순서: 0 → 1 → 2 → 4
+
+먼저 들어온 것이 먼저 나옴!
+```
+
+### 레벨별 탐색
+
+```
+레벨 0: {0}           (시작)
+레벨 1: {1, 2, 4}     (0과 인접)
+레벨 2: {3}           (1, 2, 4와 인접, 미방문)
+...
+```
+
+### 최단 경로 보장
+
+```
+가중치 없는 그래프에서
+BFS로 찾은 경로 = 최단 경로
+
+DFS는 이 보장이 없음!
+```
+
+---
+
+## 💻 메인 함수
+
+```c
+int main() {
+    Graph *g;
+    int i;
+    
+    g = (Graph *)malloc(sizeof(Graph));
+    init_graph(g);
+    
+    // visited 배열 초기화
+    for (i = 0; i < MAX_VERTEX; i++) {
+        visited[i] = FALSE;
+    }
+    
+    // 정점 추가
+    for (i = 0; i < 6; i++) {
+        insert_vertex(g, i);
+    }
+    
+    // 간선 추가
+    insert_edge(g, 0, 1);
+    insert_edge(g, 0, 2);
+    insert_edge(g, 0, 4);
+    insert_edge(g, 1, 3);
+    insert_edge(g, 2, 3);
+    
+    // BFS 실행
+    printf("BFS 탐색 순서: ");
+    bfs(g, 0);
+    printf("\n");
+    
+    free(g);
+    return 0;
+}
+```
+
+---
+
+## 🔑 핵심 정리
+
+| 개념 | 설명 |
+|------|------|
+| **FIFO** | First In First Out (먼저 들어온 것이 먼저 나옴) |
+| **레벨별** | 거리가 가까운 정점부터 방문 |
+| **최단 경로** | 가중치 없는 그래프에서 보장 |
+| **원형 큐** | 배열을 원형으로 사용하여 효율적 관리 |
+| **front & rear** | 큐의 시작과 끝을 나타내는 포인터 |
+
+---
+
+## 🎓 DFS vs BFS 최종 비교
+
+| 특성 | DFS | BFS |
+|------|-----|-----|
+| 자료구조 | 스택 | 큐 |
+| 탐색 방식 | 깊이 | 너비 |
+| 순서 | LIFO | FIFO |
+| 최단 경로 | ❌ | ✅ |
+| 구현 | 간단 | 중간 |
+| 메모리 | 적음 | 많음 |
+| 사용처 | 일반 탐색 | 최단 경로 |

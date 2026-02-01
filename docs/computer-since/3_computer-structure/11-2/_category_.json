@@ -1,0 +1,8 @@
+{
+  "label": "페이지 매핑방식",
+  "position": 23,
+  "link": {
+    "type": "generated-index",
+    "description": "가상기억장치의 세그먼테이션 매핑방식과 혼용 매핑방식 "
+  }
+}

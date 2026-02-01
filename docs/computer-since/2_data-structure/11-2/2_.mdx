@@ -1,0 +1,367 @@
+---
+title: "깊이 우선 탐색 - 재귀 방식"
+description: "재귀함수로 DFS를 구현하는 방법을 배웁니다."
+slug: "dfs-recursive"
+sidebar_position: 2
+date: "2024-01-15"
+---
+
+## 🎯 DFS 재귀 구현의 원리
+
+재귀함수를 사용하면 **스택을 자동으로 사용**하게 됩니다. 함수가 호출될 때마다 복귀 주소가 스택에 저장되기 때문입니다.
+
+---
+
+## 📝 헤더 파일 및 상수 정의
+
+```c
+#include <stdio.h>      // printf, fprintf 사용
+#include <stdlib.h>     // malloc, free 사용
+
+#define MAX_VERTEX 50   // 최대 정점 개수
+#define TRUE 1          // 참 (1로 정의)
+#define FALSE 0         // 거짓 (0으로 정의)
+```
+
+**코드 분석:**
+- `#define TRUE 1`: 참을 1로 정의 (boolean 대신 사용)
+- `#define FALSE 0`: 거짓을 0으로 정의
+- 이렇게 하면 `visited[i] = TRUE` 같이 읽기 쉬운 코드 작성 가능
+
+---
+
+## 🏗️ 구조체 정의
+
+```c
+typedef struct {
+    int n;                              // 현재 정점 개수
+    int adj_matrix[MAX_VERTEX][MAX_VERTEX];  // 인접 행렬
+} Graph;
+```
+
+**코드 분석:**
+- `int n`: 그래프에 있는 정점의 개수
+- `int adj_matrix[MAX_VERTEX][MAX_VERTEX]`: 50×50 크기의 2D 배열
+  - `adj_matrix[i][j] = 1`: 정점 i와 j 사이에 간선이 있음
+  - `adj_matrix[i][j] = 0`: 정점 i와 j 사이에 간선이 없음
+
+---
+
+## ⚙️ 함수 구현
+
+### 1️⃣ 그래프 초기화
+
+```c
+void init_graph(Graph *g) {
+    int r, c;
+    
+    // 정점 개수를 0으로 초기화
+    g->n = 0;
+    
+    // 모든 행(r)과 열(c)을 0으로 설정
+    for (r = 0; r < MAX_VERTEX; r++) {
+        for (c = 0; c < MAX_VERTEX; c++) {
+            g->adj_matrix[r][c] = 0;  // 모든 간선을 0으로 (연결 안 됨)
+        }
+    }
+}
+```
+
+**코드 분석:**
+```c
+g->n = 0;
+→ 정점이 없는 상태로 초기화
+
+g->adj_matrix[r][c] = 0;
+→ 모든 위치를 0으로 설정
+→ 처음에는 어떤 정점도 연결되지 않은 상태
+```
+
+---
+
+### 2️⃣ 정점 추가
+
+```c
+void insert_vertex(Graph *g, int v) {
+    // 정점 개수가 최대를 초과하는지 확인
+    if (g->n + 1 > MAX_VERTEX) {
+        fprintf(stderr, "Error: 그래프 정점 개수 초과!\n");
+        return;
+    }
+    
+    // 정점 개수 증가
+    g->n = g->n + 1;
+}
+```
+
+**코드 분석:**
+```c
+if (g->n + 1 > MAX_VERTEX)
+→ 현재 개수 + 1이 50을 초과하면 안 됨
+
+g->n = g->n + 1;
+→ 성공하면 정점 개수 1 증가
+→ 예: n=3이면 새 정점은 0,1,2,3 (총 4개)
+```
+
+---
+
+### 3️⃣ 간선 추가
+
+```c
+void insert_edge(Graph *g, int start, int end) {
+    // start와 end가 유효한 정점인지 확인
+    if (start < 0 || start >= g->n || end < 0 || end >= g->n) {
+        fprintf(stderr, "Error: 그래프 정점 번호 오류!\n");
+        return;
+    }
+    
+    // 무방향 그래프이므로 양방향 모두 설정
+    g->adj_matrix[start][end] = 1;
+    g->adj_matrix[end][start] = 1;
+}
+```
+
+**코드 분석:**
+```c
+if (start < 0 || start >= g->n)
+→ start가 0~(n-1) 범위 안에 있는지 확인
+→ 예: n=4면 0,1,2,3만 유효
+
+g->adj_matrix[start][end] = 1;
+g->adj_matrix[end][start] = 1;
+→ 양쪽 다 1로 설정 (무방향 그래프)
+```
+
+---
+
+## 🔍 DFS 재귀 함수
+
+```c
+// visited 배열은 전역 변수로 선언 (함수들이 공유하기 위해)
+int visited[MAX_VERTEX];
+
+void dfs_recursive(Graph *g, int v) {
+    int w;
+    
+    // ① 현재 정점을 방문했다고 표시
+    visited[v] = TRUE;
+    
+    // ② 현재 정점 출력 (방문 기록)
+    printf("%d ", v);
+    
+    // ③ 모든 정점에 대해 반복
+    for (w = 0; w < g->n; w++) {
+        // 현재 정점 v와 w 사이에 간선이 있는지 확인
+        if (g->adj_matrix[v][w] == 1) {
+            // w가 아직 방문되지 않았다면
+            if (visited[w] == FALSE) {
+                // w를 시작으로 재귀 호출 (깊이 우선)
+                dfs_recursive(g, w);
+            }
+        }
+    }
+    
+    // ④ 더 이상 갈 곳이 없으면 함수 종료 (자동으로 이전 정점으로 복귀)
+}
+```
+
+**코드 상세 분석:**
+
+```c
+visited[v] = TRUE;
+→ 정점 v를 방문했다고 표시
+→ 같은 정점을 다시 방문하는 것을 방지
+
+printf("%d ", v);
+→ 현재 방문한 정점을 출력
+→ 탐색 결과를 볼 수 있음
+
+for (w = 0; w < g->n; w++)
+→ 모든 정점(0부터 n-1까지)을 확인
+
+if (g->adj_matrix[v][w] == 1)
+→ v와 w 사이에 간선이 있는가?
+→ 인접행렬에서 1이면 연결된 것
+
+if (visited[w] == FALSE)
+→ w가 아직 방문되지 않았는가?
+→ 중복 방문 방지
+
+dfs_recursive(g, w);
+→ w를 시작으로 재귀 호출
+→ 깊이 우선 탐색 (한 경로를 끝까지 탐색)
+```
+
+### 동작 예시
+
+```
+그래프:     0 ─── 1
+            │ ╲   │
+            2 ─── 3
+
+dfs_recursive(g, 0) 호출:
+1. visited[0] = TRUE, 출력: 0
+2. w=0: 자체 간선 (무시)
+3. w=1: 간선 있음, 미방문 → dfs_recursive(g, 1)
+   │
+   └─ dfs_recursive(g, 1):
+      1. visited[1] = TRUE, 출력: 1
+      2. w=0: 간선 있지만 이미 방문
+      3. w=2: 간선 있음, 미방문 → dfs_recursive(g, 2)
+         │
+         └─ dfs_recursive(g, 2):
+            1. visited[2] = TRUE, 출력: 2
+            2. w=0: 이미 방문
+            3. w=1: 이미 방문
+            4. w=3: 간선 있음, 미방문 → dfs_recursive(g, 3)
+               │
+               └─ dfs_recursive(g, 3):
+                  1. visited[3] = TRUE, 출력: 3
+                  2. 모든 이웃 방문됨
+                  3. 함수 종료 (복귀)
+
+최종 출력: 0 1 2 3
+```
+
+---
+
+## 🔄 백트래킹의 자동 수행
+
+재귀함수의 멋진 점은 **백트래킹이 자동으로 일어난다**는 것입니다.
+
+```c
+dfs_recursive(g, 0);
+  dfs_recursive(g, 1);    // 복귀주소 저장
+    dfs_recursive(g, 2);  // 복귀주소 저장
+      // 더 이상 갈 곳 없음
+      // 여기서 함수 종료
+    // 자동으로 이전 호출 지점으로 복귀 (백트래킹)
+  // 다음 인접 정점 확인
+```
+
+스택이 자동으로 관리됩니다! (묵시적 스택)
+
+---
+
+## 💻 메인 함수
+
+```c
+int main() {
+    Graph *g;
+    int i;
+    
+    // ① 메모리 할당
+    g = (Graph *)malloc(sizeof(Graph));
+    
+    // ② 그래프 초기화
+    init_graph(g);
+    
+    // ③ visited 배열 초기화 (모두 거짓으로 설정)
+    for (i = 0; i < MAX_VERTEX; i++) {
+        visited[i] = FALSE;
+    }
+    
+    // ④ 정점 추가 (0, 1, 2, 3)
+    for (i = 0; i < 4; i++) {
+        insert_vertex(g, i);
+    }
+    
+    // ⑤ 간선 추가
+    insert_edge(g, 0, 1);  // 0-1
+    insert_edge(g, 0, 2);  // 0-2
+    insert_edge(g, 0, 3);  // 0-3
+    insert_edge(g, 1, 2);  // 1-2
+    insert_edge(g, 2, 3);  // 2-3
+    
+    // ⑥ DFS 실행 (0부터 시작)
+    printf("DFS 탐색 순서: ");
+    dfs_recursive(g, 0);
+    printf("\n");
+    
+    // ⑦ 메모리 해제
+    free(g);
+    
+    return 0;
+}
+```
+
+**코드 분석:**
+
+```c
+for (i = 0; i < MAX_VERTEX; i++) {
+    visited[i] = FALSE;
+}
+→ 모든 정점을 미방문 상태로 초기화
+→ DFS 전에 반드시 필요!
+
+printf("DFS 탐색 순서: ");
+dfs_recursive(g, 0);
+printf("\n");
+→ 정점 0부터 시작하여 DFS 실행
+→ 탐색 중 방문하는 정점들이 출력됨
+```
+
+---
+
+## 📊 실행 결과
+
+```
+DFS 탐색 순서: 0 1 2 3
+
+그래프:
+  0 ─── 1
+  │ ╲   │
+  2 ─── 3
+
+탐색 경로:
+0 → 1 → 2 → 3
+(백트래킹 없음: 모든 정점이 연결되어 있음)
+```
+
+### 다른 그래프 예시
+
+```
+만약 그래프가:
+  0 ─── 1
+  │     
+  2     3
+
+간선: (0,1), (0,2)만 있다면:
+
+DFS 탐색 순서: 0 1 2 3
+
+탐색 경로:
+0 → 1 (막힘, 백트래킹)
+  → 2 (막힘, 백트래킹)
+  → 3 (시작에서 연결 안 됨)
+```
+
+---
+
+## 🔑 핵심 정리
+
+| 개념 | 설명 |
+|------|------|
+| **visited 배열** | 방문 여부를 기록하는 필수 배열 |
+| **인접 행렬 탐색** | 모든 정점을 반복하며 확인 |
+| **재귀 호출** | 깊이를 우선하는 탐색 |
+| **백트래킹** | 자동으로 이전 정점으로 복귀 |
+| **묵시적 스택** | 재귀로 자동 관리되는 스택 |
+
+---
+
+## 🎓 주요 특징
+
+### DFS 재귀 방식의 장점
+✅ 구현이 매우 간단  
+✅ 코드가 직관적  
+✅ 백트래킹이 자동 처리
+
+### DFS 재귀 방식의 단점
+❌ 깊은 재귀로 스택 오버플로우 가능  
+❌ 스택 크기 제한 있음
+
+### 사용 시기
+- 정점이 적을 때 (재귀 깊이가 낮을 때)
+- 간단한 탐색 구현이 필요할 때
