@@ -213,8 +213,12 @@ const config = {
                 href: 'https://github.com/zenoK80',
               },
               {
-                label: '블로그',
-                href: 'https://github.com/zenoK80',
+                label: '블로그:Skill',
+                href: 'https://zenok.mycafe24.com/',
+              },
+              {
+                label: '블로그:Lite',
+                href: 'zenok.tistory.com',
               },
             ],
           },
