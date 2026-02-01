@@ -218,7 +218,7 @@ const config = {
               },
               {
                 label: '블로그:Lite',
-                href: 'zenok.tistory.com',
+                href: 'https://zenok.tistory.com',
               },
             ],
           },
