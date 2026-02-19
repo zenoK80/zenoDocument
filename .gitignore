@@ -20,3 +20,11 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# ==============================
+# 🤖 AI 자동화 스크립트 및 보안 파일들
+# ==============================
+auto_maker.py
+*_raw.txt
+docs/_trash/
+error_log.txt
