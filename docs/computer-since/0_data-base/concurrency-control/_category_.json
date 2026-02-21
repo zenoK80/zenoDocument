@@ -1,0 +1,8 @@
+{
+  "label": "병행 제어 개요 및 로킹 기법",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "데이터베이스 병행 제어의 개념, 목적, 무제어 동시공용의 문제점(갱신 분실 등)을 다루는 문서 묶음"
+  }
+}

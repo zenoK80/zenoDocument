@@ -1,0 +1,8 @@
+{
+  "label": "고급 병행제어 기법",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "데이터베이스 병행제어의 로킹 기법과 교착상태 개념 및 발생 조건을 다루는 문서 묶음"
+  }
+}
