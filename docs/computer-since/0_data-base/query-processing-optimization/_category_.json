@@ -1,0 +1,8 @@
+{
+  "label": "질의어 처리 단계 및 최적화",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "SQL 고급 질의어의 처리 수행 과정과 각 단계별 구성요소 및 최적화 원리를 학습합니다"
+  }
+}

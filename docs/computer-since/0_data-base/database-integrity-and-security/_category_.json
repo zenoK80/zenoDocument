@@ -1,0 +1,8 @@
+{
+  "label": "데이터베이스 무결성 및 보안",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "데이터베이스의 무결성 개념, 보안과의 차이, 무결성 규정 및 검사 메커니즘에 대한 학습"
+  }
+}

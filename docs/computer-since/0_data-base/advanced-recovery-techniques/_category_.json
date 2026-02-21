@@ -1,0 +1,8 @@
+{
+  "label": "데이터베이스 고급 회복 기법",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "로그 레코드 버퍼링과 로그 우선기록 규약을 중심으로 한 데이터베이스 고급 회복 기법"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "label": "트랜잭션 개요 및 장애와 회복",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "데이터베이스 트랜잭션의 개념, ACID 특성, 병행제어와 회복에 대한 기초 학습"
+  }
+}
