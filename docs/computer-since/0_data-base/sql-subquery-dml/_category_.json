@@ -1,0 +1,8 @@
+{
+  "label": "SQL 고급 검색 및 데이터 조작어",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "서브쿼리(부속질의문)의 개념과 단일행·다중행 비교 연산자를 활용한 SQL 고급 검색 방법"
+  }
+}

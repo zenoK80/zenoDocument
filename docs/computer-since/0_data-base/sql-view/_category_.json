@@ -1,0 +1,8 @@
+{
+  "label": "SQL 뷰(View)",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "SQL 뷰의 개념, 종류, 특성 및 활용 방법을 다루는 문서 묶음"
+  }
+}

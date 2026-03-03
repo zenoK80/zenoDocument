@@ -1,0 +1,8 @@
+{
+  "label": "소프트웨어 공학 시험 문제 풀이",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "SOA, WAS, 테스트, 리팩토링, 디자인 패턴 등 소프트웨어 공학 주요 개념 시험 문제 및 해설"
+  }
+}

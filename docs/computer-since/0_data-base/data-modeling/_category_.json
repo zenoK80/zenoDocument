@@ -1,0 +1,8 @@
+{
+  "label": "데이터 모델링",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "현실 세계를 데이터베이스로 구현하기 위한 데이터 모델링 개념, 설계 단계, ER 모델을 다루는 문서 묶음"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "label": "관계 데이터의 제약",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "관계 데이터베이스의 키 종류와 무결성 제약 조건을 학습하는 문서 묶음"
+  }
+}

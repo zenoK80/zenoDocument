@@ -1,0 +1,8 @@
+{
+  "label": "관계대수",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "관계대수의 개념, 연산자 분류, 일반 집합 연산자(합집합 등)를 다루는 데이터베이스 이론 문서"
+  }
+}

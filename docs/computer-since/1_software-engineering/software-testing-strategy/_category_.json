@@ -1,0 +1,8 @@
+{
+  "label": "소프트웨어 검사 전략",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "소프트웨어 테스트 단계별 전략과 단위 테스트의 개념 및 구성 요소를 다루는 문서"
+  }
+}
